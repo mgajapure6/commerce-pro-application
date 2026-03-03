@@ -1,7 +1,7 @@
 package com.commerce_pro_backend.inventory.entity;
 
-import com.commerce_pro_backend.inventory.entity.StockMovement.MovementType;
-import com.commerce_pro_backend.product.entity.Product;
+import com.commerce_pro_backend.catalog.product.entity.Product;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

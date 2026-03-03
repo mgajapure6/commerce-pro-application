@@ -1,11 +1,12 @@
 package com.commerce_pro_backend.inventory.mapper;
 
+import com.commerce_pro_backend.catalog.product.dto.ProductSummaryDTO;
+import com.commerce_pro_backend.catalog.product.entity.Product;
 import com.commerce_pro_backend.inventory.dto.*;
 import com.commerce_pro_backend.inventory.entity.Inventory;
 import com.commerce_pro_backend.inventory.entity.StockMovement;
 import com.commerce_pro_backend.inventory.entity.Warehouse;
-import com.commerce_pro_backend.product.dto.ProductSummaryDTO;
-import com.commerce_pro_backend.product.entity.Product;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;

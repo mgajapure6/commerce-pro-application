@@ -1,14 +1,14 @@
 package com.commerce_pro_backend.common.data;
 
+import com.commerce_pro_backend.catalog.product.dto.ProductAttributeDTO;
+import com.commerce_pro_backend.catalog.product.dto.ProductRequestDTO;
+import com.commerce_pro_backend.catalog.product.dto.ProductResponseDTO;
+import com.commerce_pro_backend.catalog.product.dto.ProductVariantDTO;
+import com.commerce_pro_backend.catalog.product.service.ProductService;
 import com.commerce_pro_backend.inventory.dto.InventoryRequestDTO;
 import com.commerce_pro_backend.inventory.dto.WarehouseRequestDTO;
-import com.commerce_pro_backend.inventory.entity.Warehouse;
 import com.commerce_pro_backend.inventory.service.InventoryService;
-import com.commerce_pro_backend.product.dto.ProductAttributeDTO;
-import com.commerce_pro_backend.product.dto.ProductRequestDTO;
-import com.commerce_pro_backend.product.dto.ProductResponseDTO;
-import com.commerce_pro_backend.product.dto.ProductVariantDTO;
-import com.commerce_pro_backend.product.service.ProductService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

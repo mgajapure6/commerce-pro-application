@@ -1,12 +1,13 @@
 package com.commerce_pro_backend.inventory.entity;
 
-import com.commerce_pro_backend.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
+
+import com.commerce_pro_backend.catalog.product.entity.Product;
 
 import java.time.LocalDateTime;
 

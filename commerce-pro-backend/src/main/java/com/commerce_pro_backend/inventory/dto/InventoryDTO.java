@@ -1,6 +1,5 @@
 package com.commerce_pro_backend.inventory.dto;
 
-import com.commerce_pro_backend.product.dto.ProductSummaryDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.commerce_pro_backend.catalog.product.dto.ProductSummaryDTO;
 
 /**
  * Inventory DTO - Main inventory record response

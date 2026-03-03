@@ -1,5 +1,7 @@
 package com.commerce_pro_backend.inventory.service;
 
+import com.commerce_pro_backend.catalog.product.entity.Product;
+import com.commerce_pro_backend.catalog.product.repository.ProductRepository;
 import com.commerce_pro_backend.common.dto.PageResponse;
 import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.inventory.dto.*;
@@ -11,8 +13,7 @@ import com.commerce_pro_backend.inventory.repository.InventoryRepository;
 import com.commerce_pro_backend.inventory.repository.StockMovementRepository;
 import com.commerce_pro_backend.inventory.repository.WarehouseRepository;
 import com.commerce_pro_backend.inventory.specification.InventorySpecification;
-import com.commerce_pro_backend.product.entity.Product;
-import com.commerce_pro_backend.product.repository.ProductRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
