@@ -35,56 +35,6 @@ public class InventoryController {
     private final InventoryService inventoryService;
     private final LowStockService lowStockService;
 
-    // ==================== WAREHOUSE ENDPOINTS ====================
-
-    @GetMapping("/warehouses")
-    @Operation(summary = "Get all warehouses")
-    public ResponseEntity<ApiResponse<List<WarehouseDTO>>> getAllWarehouses() {
-        List<WarehouseDTO> warehouses = inventoryService.getAllWarehouses();
-        return ResponseEntity.ok(ApiResponse.success("Warehouses retrieved successfully", warehouses));
-    }
-
-    @GetMapping("/warehouses/active")
-    @Operation(summary = "Get active warehouses")
-    public ResponseEntity<ApiResponse<List<WarehouseDTO>>> getActiveWarehouses() {
-        List<WarehouseDTO> warehouses = inventoryService.getActiveWarehouses();
-        return ResponseEntity.ok(ApiResponse.success("Active warehouses retrieved successfully", warehouses));
-    }
-
-    @GetMapping("/warehouses/{id}")
-    @Operation(summary = "Get warehouse by ID")
-    public ResponseEntity<ApiResponse<WarehouseDTO>> getWarehouseById(
-            @PathVariable String id) {
-        WarehouseDTO warehouse = inventoryService.getWarehouseById(id);
-        return ResponseEntity.ok(ApiResponse.success("Warehouse retrieved successfully", warehouse));
-    }
-
-    @PostMapping("/warehouses")
-    @Operation(summary = "Create warehouse")
-    public ResponseEntity<ApiResponse<WarehouseDTO>> createWarehouse(
-            @Valid @RequestBody WarehouseRequestDTO requestDTO) {
-        WarehouseDTO created = inventoryService.createWarehouse(requestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Warehouse created successfully", created));
-    }
-
-    @PutMapping("/warehouses/{id}")
-    @Operation(summary = "Update warehouse")
-    public ResponseEntity<ApiResponse<WarehouseDTO>> updateWarehouse(
-            @PathVariable String id,
-            @Valid @RequestBody WarehouseRequestDTO requestDTO) {
-        WarehouseDTO updated = inventoryService.updateWarehouse(id, requestDTO);
-        return ResponseEntity.ok(ApiResponse.success("Warehouse updated successfully", updated));
-    }
-
-    @DeleteMapping("/warehouses/{id}")
-    @Operation(summary = "Delete warehouse")
-    public ResponseEntity<ApiResponse<Void>> deleteWarehouse(
-            @PathVariable String id) {
-        inventoryService.deleteWarehouse(id);
-        return ResponseEntity.ok(ApiResponse.success("Warehouse deleted successfully", null));
-    }
-
     // ==================== INVENTORY ENDPOINTS ====================
 
     @GetMapping
@@ -166,6 +116,58 @@ public class InventoryController {
         inventoryService.deleteInventory(id);
         return ResponseEntity.ok(ApiResponse.success("Inventory deleted successfully", null));
     }
+
+    // ==================== WAREHOUSE ENDPOINTS ====================
+
+    @GetMapping("/warehouses")
+    @Operation(summary = "Get all warehouses")
+    public ResponseEntity<ApiResponse<List<WarehouseDTO>>> getAllWarehouses() {
+        List<WarehouseDTO> warehouses = inventoryService.getAllWarehouses();
+        return ResponseEntity.ok(ApiResponse.success("Warehouses retrieved successfully", warehouses));
+    }
+
+    @GetMapping("/warehouses/active")
+    @Operation(summary = "Get active warehouses")
+    public ResponseEntity<ApiResponse<List<WarehouseDTO>>> getActiveWarehouses() {
+        List<WarehouseDTO> warehouses = inventoryService.getActiveWarehouses();
+        return ResponseEntity.ok(ApiResponse.success("Active warehouses retrieved successfully", warehouses));
+    }
+
+    @GetMapping("/warehouses/{id}")
+    @Operation(summary = "Get warehouse by ID")
+    public ResponseEntity<ApiResponse<WarehouseDTO>> getWarehouseById(
+            @PathVariable String id) {
+        WarehouseDTO warehouse = inventoryService.getWarehouseById(id);
+        return ResponseEntity.ok(ApiResponse.success("Warehouse retrieved successfully", warehouse));
+    }
+
+    @PostMapping("/warehouses")
+    @Operation(summary = "Create warehouse")
+    public ResponseEntity<ApiResponse<WarehouseDTO>> createWarehouse(
+            @Valid @RequestBody WarehouseRequestDTO requestDTO) {
+        WarehouseDTO created = inventoryService.createWarehouse(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Warehouse created successfully", created));
+    }
+
+    @PutMapping("/warehouses/{id}")
+    @Operation(summary = "Update warehouse")
+    public ResponseEntity<ApiResponse<WarehouseDTO>> updateWarehouse(
+            @PathVariable String id,
+            @Valid @RequestBody WarehouseRequestDTO requestDTO) {
+        WarehouseDTO updated = inventoryService.updateWarehouse(id, requestDTO);
+        return ResponseEntity.ok(ApiResponse.success("Warehouse updated successfully", updated));
+    }
+
+    @DeleteMapping("/warehouses/{id}")
+    @Operation(summary = "Delete warehouse")
+    public ResponseEntity<ApiResponse<Void>> deleteWarehouse(
+            @PathVariable String id) {
+        inventoryService.deleteWarehouse(id);
+        return ResponseEntity.ok(ApiResponse.success("Warehouse deleted successfully", null));
+    }
+
+    
 
     // ==================== STOCK OPERATIONS ====================
 

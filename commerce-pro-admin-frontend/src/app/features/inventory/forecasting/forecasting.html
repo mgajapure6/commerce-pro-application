@@ -368,7 +368,7 @@
                                             class="font-medium text-gray-900 group-hover:text-indigo-600 transition-colors">
                                             {{ forecast.productName }}</p>
                                         <p class="text-xs text-gray-500">{{ forecast.sku }} • {{
-                                            forecast.product.category }}</p>
+                                            forecast.product ? forecast.product.category : ''}}</p>
                                     </div>
                                 </div>
                             </td>
@@ -381,7 +381,7 @@
                                             [class.bg-green-500]="forecast.alertLevel === 'none'"
                                             [class.bg-yellow-500]="forecast.alertLevel === 'low' || forecast.alertLevel === 'medium'"
                                             [class.bg-red-500]="forecast.alertLevel === 'high'"
-                                            [style.width.%]="Math.min((forecast.currentStock / ((forecast.avgDailySales || 1) * (forecast.product.leadTimeDays || 1) * 3)) * 100, 100)">
+                                            [style.width.%]="getWidth(forecast)">
                                         </div>
                                     </div>
                                     <p class="text-xs text-gray-500">{{ forecast.avgDailySales ? Math.round(forecast.currentStock /
@@ -391,7 +391,7 @@
                             <td class="px-4 py-4">
                                 <span class="text-sm font-medium text-gray-900">{{ forecast.avgDailySales }} /
                                     day</span>
-                                <p class="text-xs text-gray-500">Lead time: {{ forecast.product.leadTimeDays }} days</p>
+                                <p class="text-xs text-gray-500">Lead time: {{ forecast.product ? forecast.product.leadTimeDays : '' }} days</p>
                             </td>
                             <td class="px-4 py-4">
                                 <div class="space-y-1">

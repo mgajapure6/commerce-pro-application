@@ -109,6 +109,11 @@ export class Forecasting implements OnInit {
     this.initializeForms();
   }
 
+  getWidth(forecast: DemandForecast){
+    const leadTime = forecast.product ? forecast.product.leadTimeDays : 1;
+    return Math.min((forecast.currentStock / ((forecast.avgDailySales || 1) * (leadTime || 1) * 3)) * 100, 100)
+  }
+
   initializeForms() {
     this.filterForm = this.fb.group({
       category: [''],
