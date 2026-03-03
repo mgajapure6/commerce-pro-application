@@ -41,6 +41,7 @@ yarn-error.log
 
 # Visual Studio Code
 .vscode/*
+.vscode/
 /commerce-pro-admin-frontend/.vscode/*
 /commerce-pro-customer-frontend/.vscode/*
 !.vscode/settings.json
