@@ -1,0 +1,182 @@
+[
+  {
+    "id": "st_001",
+    "reference": "ST-2026-0001",
+    "status": "completed",
+    "sourceWarehouse": {
+      "id": "wh_001",
+      "name": "Main Distribution Center"
+    },
+    "destinationWarehouse": {
+      "id": "wh_002",
+      "name": "West Coast Hub"
+    },
+    "createdBy": "emp_101",
+    "createdAt": "2026-02-10T08:00:00Z",
+    "requestedDate": "2026-02-15T00:00:00Z",
+    "shippedDate": "2026-02-14T10:30:00Z",
+    "receivedDate": "2026-02-16T14:00:00Z",
+    "lineItems": [
+      {
+        "id": "sti_001",
+        "productId": "prod_001",
+        "productName": "Wireless Bluetooth Headphones Pro",
+        "sku": "WBHP-001",
+        "quantity": 100,
+        "quantityShipped": 100,
+        "quantityReceived": 100,
+        "status": "completed"
+      },
+      {
+        "id": "sti_002",
+        "productId": "prod_002",
+        "productName": "Smart Watch Series 5",
+        "sku": "SWS5-001",
+        "quantity": 25,
+        "quantityShipped": 25,
+        "quantityReceived": 25,
+        "status": "completed"
+      }
+    ],
+    "shipmentInfo": {
+      "carrier": "FedEx Freight",
+      "trackingNumber": "TRK123456789",
+      "estimatedDelivery": "2026-02-16T12:00:00Z",
+      "actualDelivery": "2026-02-16T14:00:00Z",
+      "weight": {
+        "value": 32.5,
+        "unit": "kg"
+      }
+    },
+    "notes": "Scheduled replenishment for West Coast inventory",
+    "totalItems": 125
+  },
+  {
+    "id": "st_002",
+    "reference": "ST-2026-0002",
+    "status": "in_transit",
+    "sourceWarehouse": {
+      "id": "wh_001",
+      "name": "Main Distribution Center"
+    },
+    "destinationWarehouse": {
+      "id": "wh_003",
+      "name": "South Distribution"
+    },
+    "createdBy": "emp_101",
+    "createdAt": "2026-02-20T09:00:00Z",
+    "requestedDate": "2026-02-25T00:00:00Z",
+    "shippedDate": "2026-02-24T16:00:00Z",
+    "receivedDate": null,
+    "lineItems": [
+      {
+        "id": "sti_003",
+        "productId": "prod_006",
+        "productName": "Mechanical Keyboard RGB",
+        "sku": "MKRGB-001",
+        "quantity": 30,
+        "quantityShipped": 30,
+        "quantityReceived": 0,
+        "status": "in_transit"
+      },
+      {
+        "id": "sti_004",
+        "productId": "prod_003",
+        "productName": "Organic Cotton T-Shirt",
+        "sku": "OCTS-001",
+        "quantity": 200,
+        "quantityShipped": 200,
+        "quantityReceived": 0,
+        "status": "in_transit"
+      }
+    ],
+    "shipmentInfo": {
+      "carrier": "UPS Freight",
+      "trackingNumber": "1Z999AA10123456784",
+      "estimatedDelivery": "2026-02-27T16:00:00Z",
+      "actualDelivery": null,
+      "weight": {
+        "value": 48.2,
+        "unit": "kg"
+      }
+    },
+    "notes": "Emergency stock replenishment for Dallas facility",
+    "totalItems": 230
+  },
+  {
+    "id": "st_003",
+    "reference": "ST-2026-0003",
+    "status": "pending",
+    "sourceWarehouse": {
+      "id": "wh_002",
+      "name": "West Coast Hub"
+    },
+    "destinationWarehouse": {
+      "id": "wh_004",
+      "name": "Chicago Facility"
+    },
+    "createdBy": "emp_102",
+    "createdAt": "2026-02-25T11:00:00Z",
+    "requestedDate": "2026-03-05T00:00:00Z",
+    "shippedDate": null,
+    "receivedDate": null,
+    "lineItems": [
+      {
+        "id": "sti_005",
+        "productId": "prod_005",
+        "productName": "Leather Laptop Bag",
+        "sku": "LLB-001",
+        "quantity": 15,
+        "quantityShipped": 0,
+        "quantityReceived": 0,
+        "status": "pending"
+      },
+      {
+        "id": "sti_006",
+        "productId": "prod_004",
+        "productName": "Running Shoes Pro",
+        "sku": "RSP-001",
+        "quantity": 40,
+        "quantityShipped": 0,
+        "quantityReceived": 0,
+        "status": "pending"
+      }
+    ],
+    "shipmentInfo": null,
+    "notes": "Awaiting approval from warehouse manager",
+    "totalItems": 55
+  },
+  {
+    "id": "st_004",
+    "reference": "ST-2026-0004",
+    "status": "draft",
+    "sourceWarehouse": {
+      "id": "wh_004",
+      "name": "Chicago Facility"
+    },
+    "destinationWarehouse": {
+      "id": "wh_001",
+      "name": "Main Distribution Center"
+    },
+    "createdBy": "emp_104",
+    "createdAt": "2026-02-27T10:00:00Z",
+    "requestedDate": null,
+    "shippedDate": null,
+    "receivedDate": null,
+    "lineItems": [
+      {
+        "id": "sti_007",
+        "productId": "prod_007",
+        "productName": "Yoga Mat Premium",
+        "sku": "YMP-001",
+        "quantity": 50,
+        "quantityShipped": 0,
+        "quantityReceived": 0,
+        "status": "draft"
+      }
+    ],
+    "shipmentInfo": null,
+    "notes": "Draft - Need to verify stock availability",
+    "totalItems": 50
+  }
+]

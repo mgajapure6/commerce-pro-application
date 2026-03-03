@@ -1,0 +1,714 @@
+<!-- Stock Transfer Component - UI Guidelines Compliant -->
+<div class="min-h-screen bg-gray-50/50 p-4 sm:p-6 lg:p-8">
+    <div class="max-w-[1600px] mx-auto space-y-6">
+        
+        <!-- Header Section -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-bold text-gray-900">Stock Transfers</h1>
+                    <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">
+                        {{ filteredTransfers().length }} items
+                    </span>
+                </div>
+                <p class="text-gray-500 mt-1 text-sm">Manage warehouse-to-warehouse stock transfers and shipments</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                @if (activeView() === 'list') {
+                <button (click)="startNewTransfer()" 
+                    class="px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium flex items-center gap-2 shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>New Transfer</span>
+                </button>
+                } @else {
+                <button (click)="goToList()" 
+                    class="px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-sm font-medium flex items-center gap-2 hover:bg-gray-50 transition-all">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Back to List</span>
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        @if (activeView() === 'list') {
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            @for (stat of displayStats(); track stat.label) {
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{{ stat.label }}</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center {{ stat.bgColor }}">
+                        <i class="bi bi-{{ stat.icon }} {{ stat.iconColor }} text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+
+        <!-- Filters Bar -->
+        @if (activeView() === 'list') {
+        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="relative flex-1 min-w-[200px]">
+                    <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" 
+                        [(ngModel)]="searchQuery"
+                        placeholder="Search transfers..."
+                        class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                
+                <select [(ngModel)]="filterStatus" 
+                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="all">All Status</option>
+                    <option value="draft">Draft</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="in_transit">In Transit</option>
+                    <option value="received">Received</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                
+                <select [(ngModel)]="filterType"
+                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="all">All Types</option>
+                    @for (type of transferTypes; track type.value) {
+                    <option [value]="type.value">{{ type.label }}</option>
+                    }
+                </select>
+                
+                <select [(ngModel)]="filterFromWarehouse"
+                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="all">From Any Warehouse</option>
+                    @for (warehouse of warehouses(); track warehouse.id) {
+                    <option [value]="warehouse.id">From: {{ warehouse.name }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+        }
+
+        <!-- Loading State -->
+        @if (isLoading()) {
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+            <div class="animate-pulse space-y-4">
+                <div class="w-16 h-16 bg-gray-200 rounded-2xl mx-auto"></div>
+                <div class="h-4 bg-gray-200 rounded w-48 mx-auto"></div>
+                <div class="h-3 bg-gray-200 rounded w-32 mx-auto"></div>
+            </div>
+        </div>
+        }
+
+        <!-- Error State -->
+        @if (hasError() && !isLoading()) {
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="bi bi-exclamation-triangle text-2xl text-red-600"></i>
+            </div>
+            <p class="text-gray-600 font-medium mb-1">Failed to load transfers</p>
+            <button (click)="retry()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg mt-4">
+                <i class="bi bi-arrow-clockwise mr-2"></i>Retry
+            </button>
+        </div>
+        }
+
+        <!-- List View -->
+        @if (activeView() === 'list' && !isLoading() && !hasError()) {
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50/50 border-b border-gray-100">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Transfer #</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">From / To</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Items</th>
+                            <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Value</th>
+                            <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
+                            <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @for (transfer of filteredTransfers(); track transfer.id) {
+                        <tr class="group hover:bg-gray-50/50 transition-colors cursor-pointer" (click)="viewTransferDetail(transfer)">
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <span class="font-medium text-gray-900">{{ transfer.transferNumber }}</span>
+                                    @if (transfer.reference) {
+                                    <span class="text-xs text-gray-500">{{ transfer.reference }}</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col text-sm">
+                                    <span class="text-gray-700">{{ getWarehouseName(transfer.fromWarehouseId) }}</span>
+                                    <span class="text-gray-400"><i class="bi bi-arrow-down"></i></span>
+                                    <span class="text-gray-700">{{ getWarehouseName(transfer.toWarehouseId) }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm text-gray-700">{{ getTypeLabel(transfer.type) }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-700">
+                                {{ transfer.items!.length || 0 }}
+                            </td>
+                            <td class="px-6 py-4 text-right text-sm font-medium text-gray-900">
+                                {{ formatCurrency(transfer.totalValue) }}
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ getPriorityColor(transfer.priority) }}">
+                                    {{ getPriorityLabel(transfer.priority) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ getStatusColor(transfer.status) }}">
+                                    {{ transfer.status }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button (click)="$event.stopPropagation(); viewTransferDetail(transfer)" 
+                                    class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        } @empty {
+                        <tr>
+                            <td colspan="8" class="px-6 py-12 text-center">
+                                <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <i class="bi bi-truck text-gray-400 text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">No transfers found</h3>
+                                <p class="text-gray-500 mb-4">Create your first stock transfer to get started</p>
+                                <button (click)="startNewTransfer()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
+                                    <i class="bi bi-plus-lg mr-2"></i>New Transfer
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        }
+
+        <!-- Create View -->
+        @if (activeView() === 'create') {
+        <div class="space-y-6">
+            <!-- Transfer Form -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Transfer Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" [formGroup]="transferForm">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Transfer Type</label>
+                        <select formControlName="type" 
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            @for (type of transferTypes; track type.value) {
+                            <option [value]="type.value">{{ type.label }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                        <select formControlName="priority"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            @for (priority of transferPriorities; track priority.value) {
+                            <option [value]="priority.value">{{ priority.label }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">From Warehouse *</label>
+                        <select formControlName="fromWarehouseId"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Select Source</option>
+                            @for (warehouse of warehouses(); track warehouse.id) {
+                            <option [value]="warehouse.id">{{ warehouse.name }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">To Warehouse *</label>
+                        <select formControlName="toWarehouseId"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Select Destination</option>
+                            @for (warehouse of warehouses(); track warehouse.id) {
+                            <option [value]="warehouse.id">{{ warehouse.name }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Reference (Optional)</label>
+                        <input type="text" formControlName="reference" placeholder="e.g., TRF-001"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                        <textarea formControlName="notes" rows="2" placeholder="Additional notes..."
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items Section -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-900">Items ({{ draftItems().length }})</h2>
+                    <button (click)="openAddItem()" [disabled]="!transferForm.get('fromWarehouseId')?.value"
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium flex items-center gap-2 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="bi bi-plus-lg"></i>
+                        Add Item
+                    </button>
+                </div>
+
+                @if (draftItems().length > 0) {
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50/50 border-b border-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Quantity</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Unit Cost</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Total Value</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @for (item of draftItems(); track item.id) {
+                            <tr class="group hover:bg-gray-50/50">
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-3">
+                                        <img [src]="item.image || 'assets/placeholder-product.png'" 
+                                            class="w-10 h-10 rounded-lg object-cover bg-gray-100">
+                                        <div>
+                                            <p class="font-medium text-gray-900 text-sm">{{ item.productName }}</p>
+                                            <p class="text-xs text-gray-500">{{ item.sku }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-center text-sm font-medium">{{ item.quantity }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-700">{{ formatCurrency(item.unitCost) }}</td>
+                                <td class="px-4 py-3 text-right text-sm font-medium text-gray-900">{{ formatCurrency(item.totalValue) }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button (click)="removeItem(item.id)" 
+                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary -->
+                <div class="mt-6 pt-6 border-t border-gray-100">
+                    <div class="flex justify-end gap-8 text-sm">
+                        <div class="text-center">
+                            <p class="text-gray-500">Total Items</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ draftSummary().count }}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-gray-500">Total Quantity</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ draftSummary().totalQty }}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-gray-500">Total Value</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ formatCurrency(draftSummary().totalValue) }}</p>
+                        </div>
+                    </div>
+                </div>
+                } @else {
+                <div class="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                    <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="bi bi-box text-gray-400 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-500">No items added yet</p>
+                    <p class="text-sm text-gray-400 mt-1">Add products to transfer between warehouses</p>
+                </div>
+                }
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-3">
+                <button (click)="goToList()" class="px-6 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl text-sm font-medium">
+                    Cancel
+                </button>
+                <button (click)="saveDraft()" [disabled]="transferForm.invalid"
+                    class="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 disabled:opacity-50">
+                    Save as Draft
+                </button>
+                <button (click)="submitTransfer()" [disabled]="transferForm.invalid || draftItems().length === 0"
+                    class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                    <i class="bi bi-check-lg"></i>
+                    Submit Transfer
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- Detail View -->
+        @if (activeView() === 'detail' && selectedTransfer()) {
+        @let transfer = selectedTransfer()!;
+        <div class="space-y-6">
+            <!-- Header Card -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-bold text-gray-900">{{ transfer.transferNumber }}</h2>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium {{ getStatusColor(transfer.status) }}">
+                                {{ transfer.status }}
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium {{ getPriorityColor(transfer.priority) }}">
+                                {{ getPriorityLabel(transfer.priority) }}
+                            </span>
+                        </div>
+                        @if (transfer.reference) {
+                        <p class="text-sm text-gray-500">Reference: {{ transfer.reference }}</p>
+                        }
+                    </div>
+                    <div class="flex gap-2">
+                        @if (canApprove(transfer.status)) {
+                        <button (click)="approveTransfer()" 
+                            class="px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 flex items-center gap-2">
+                            <i class="bi bi-check-lg"></i> Approve
+                        </button>
+                        }
+                        @if (canShip(transfer.status)) {
+                        <button (click)="shipTransfer()"
+                            class="px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-medium hover:bg-purple-700 flex items-center gap-2">
+                            <i class="bi bi-truck"></i> Ship
+                        </button>
+                        }
+                        @if (canReceive(transfer.status)) {
+                        <button (click)="receiveTransfer()"
+                            class="px-4 py-2 bg-cyan-600 text-white rounded-xl text-sm font-medium hover:bg-cyan-700 flex items-center gap-2">
+                            <i class="bi bi-box-seam"></i> Receive
+                        </button>
+                        }
+                        @if (transfer.status === 'received') {
+                        <button (click)="completeTransfer()"
+                            class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 flex items-center gap-2">
+                            <i class="bi bi-check-circle"></i> Complete
+                        </button>
+                        }
+                        @if (canCancel(transfer.status)) {
+                        <button (click)="cancelTransfer()"
+                            class="px-4 py-2 bg-white border border-gray-200 text-red-600 rounded-xl text-sm font-medium hover:bg-red-50 flex items-center gap-2">
+                            <i class="bi bi-x-lg"></i> Cancel
+                        </button>
+                        }
+                        @if (canEdit(transfer.status)) {
+                        <button (click)="deleteTransfer()"
+                            class="px-4 py-2 bg-white border border-gray-200 text-red-600 rounded-xl text-sm font-medium hover:bg-red-50 flex items-center gap-2">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warehouse Flow -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <div class="flex items-center justify-center gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <i class="bi bi-building text-blue-600 text-2xl"></i>
+                        </div>
+                        <p class="text-sm text-gray-500">From</p>
+                        <p class="text-lg font-semibold text-gray-900">{{ getWarehouseName(transfer.fromWarehouseId) }}</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-2">
+                            <i class="bi bi-arrow-right text-indigo-600 text-xl"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">{{ getTypeLabel(transfer.type) }}</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <i class="bi bi-building text-green-600 text-2xl"></i>
+                        </div>
+                        <p class="text-sm text-gray-500">To</p>
+                        <p class="text-lg font-semibold text-gray-900">{{ getWarehouseName(transfer.toWarehouseId) }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Created</p>
+                    <p class="text-lg font-semibold text-gray-900">{{ formatDate(transfer.createdAt) }}</p>
+                    <p class="text-sm text-gray-500">by {{ transfer.createdBy || 'System' }}</p>
+                </div>
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Total Items</p>
+                    <p class="text-lg font-semibold text-gray-900">{{ transfer.items!.length || 0 }}</p>
+                </div>
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Total Value</p>
+                    <p class="text-lg font-semibold text-gray-900">{{ formatCurrency(transfer.totalValue) }}</p>
+                </div>
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Approved By</p>
+                    <p class="text-lg font-semibold text-gray-900">{{ transfer.approvedBy || '-' }}</p>
+                    @if (transfer.approvedAt) {
+                    <p class="text-sm text-gray-500">{{ formatDate(transfer.approvedAt) }}</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Notes -->
+            @if (transfer.notes) {
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-2">Notes</h3>
+                <p class="text-gray-700">{{ transfer.notes }}</p>
+            </div>
+            }
+
+            <!-- Items Table -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Line Items ({{ transfer.items!.length || 0 }})</h3>
+                
+                @if (transfer.items && transfer.items.length > 0) {
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50/50 border-b border-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Quantity</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Unit Cost</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Total Value</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @for (item of transfer.items; track item.id) {
+                            <tr class="hover:bg-gray-50/50">
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-3">
+                                        <img [src]="item.image || 'assets/placeholder-product.png'"
+                                            class="w-10 h-10 rounded-lg object-cover bg-gray-100">
+                                        <div>
+                                            <p class="font-medium text-gray-900 text-sm">{{ item.productName }}</p>
+                                            <p class="text-xs text-gray-500">{{ item.sku }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-center text-sm font-medium">{{ item.quantity }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-700">{{ formatCurrency(item.unitCost) }}</td>
+                                <td class="px-4 py-3 text-right text-sm font-medium text-gray-900">{{ formatCurrency(item.totalValue) }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                } @else {
+                <p class="text-gray-500 text-center py-8">No line items</p>
+                }
+            </div>
+        </div>
+        }
+
+    </div>
+</div>
+
+<!-- Add Item Modal -->
+@if (showItemModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Add Item</h2>
+            <button (click)="showItemModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 space-y-4" [formGroup]="itemForm">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Product *</label>
+                <select formControlName="inventoryItemId"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Select Product</option>
+                    @for (item of availableProducts(); track item.id) {
+                    <option [value]="item.id">
+                        {{ item.product?.name || 'Unknown' }} (Available: {{ item.quantity || 0 }})
+                    </option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Quantity *</label>
+                <input type="number" formControlName="quantity" min="1"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                <textarea formControlName="notes" rows="2"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showItemModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="saveItem()" [disabled]="itemForm.invalid"
+                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+                Add Item
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Submit Modal -->
+@if (showSubmitModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Submit Transfer</h2>
+            <button (click)="showSubmitModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Are you sure you want to submit this transfer?</p>
+            <div class="mt-4 p-4 bg-gray-50 rounded-xl">
+                <p class="text-sm text-gray-600">Items: <span class="font-medium">{{ draftItems().length }}</span></p>
+                <p class="text-sm text-gray-600">Total Value: <span class="font-medium">{{ formatCurrency(draftSummary().totalValue) }}</span></p>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showSubmitModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmSubmit()" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Approve Modal -->
+@if (showApproveModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Approve Transfer</h2>
+            <button (click)="showApproveModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Approve this stock transfer?</p>
+            <p class="text-sm text-gray-500 mt-2">{{ selectedTransfer()?.transferNumber }}</p>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showApproveModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmApprove()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                Approve
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Ship Modal -->
+@if (showShipModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Ship Transfer</h2>
+            <button (click)="showShipModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Mark this transfer as shipped?</p>
+            <p class="text-sm text-gray-500 mt-2">{{ selectedTransfer()?.transferNumber }}</p>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showShipModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmShip()" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                Confirm Ship
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Receive Modal -->
+@if (showReceiveModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Receive Transfer</h2>
+            <button (click)="showReceiveModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Confirm receipt of this transfer?</p>
+            <p class="text-sm text-gray-500 mt-2">{{ selectedTransfer()?.transferNumber }}</p>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showReceiveModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmReceive()" class="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">
+                Confirm Receive
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Cancel Modal -->
+@if (showCancelModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Cancel Transfer</h2>
+            <button (click)="showCancelModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Are you sure you want to cancel this transfer?</p>
+            <p class="text-sm text-gray-500 mt-2">{{ selectedTransfer()?.transferNumber }}</p>
+            <p class="text-sm text-red-500 mt-2">This action cannot be undone.</p>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showCancelModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmCancel()" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                Confirm Cancel
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Delete Modal -->
+@if (showDeleteModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Delete Transfer</h2>
+            <button (click)="showDeleteModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Are you sure you want to delete this transfer?</p>
+            <p class="text-sm text-gray-500 mt-2">{{ selectedTransfer()?.transferNumber }}</p>
+            <p class="text-sm text-red-500 mt-2">This action cannot be undone.</p>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showDeleteModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmDelete()" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+}

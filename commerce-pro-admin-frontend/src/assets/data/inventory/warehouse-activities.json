@@ -1,0 +1,261 @@
+[
+  {
+    "id": "wa_001",
+    "type": "receiving",
+    "priority": "normal",
+    "status": "completed",
+    "warehouseId": "wh_001",
+    "warehouseName": "Main Distribution Center",
+    "reference": "PO-2026-0042",
+    "referenceType": "purchase_order",
+    "description": "Received 250 units from TechCorp Industries",
+    "assignedTo": "emp_201",
+    "lineItems": [
+      {
+        "id": "wali_001",
+        "productId": "prod_001",
+        "sku": "WBHP-001",
+        "productName": "Wireless Bluetooth Headphones Pro",
+        "quantityExpected": 200,
+        "quantityReceived": 200,
+        "quantityPutAway": 200,
+        "location": "A1-01-R1-B02",
+        "status": "completed"
+      },
+      {
+        "id": "wali_002",
+        "productId": "prod_002",
+        "sku": "SWS5-001",
+        "productName": "Smart Watch Series 5",
+        "quantityExpected": 50,
+        "quantityReceived": 50,
+        "quantityPutAway": 50,
+        "location": "A1-01-R2-B02",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-02-15T08:00:00Z",
+    "completedAt": "2026-02-15T12:30:00Z",
+    "createdAt": "2026-02-15T06:00:00Z",
+    "updatedAt": "2026-02-15T12:30:00Z"
+  },
+  {
+    "id": "wa_002",
+    "type": "picking",
+    "priority": "high",
+    "status": "in_progress",
+    "warehouseId": "wh_001",
+    "warehouseName": "Main Distribution Center",
+    "reference": "SO-2026-0285",
+    "referenceType": "sales_order",
+    "description": "Picking order for customer #C-45892",
+    "assignedTo": "emp_202",
+    "lineItems": [
+      {
+        "id": "wali_003",
+        "productId": "prod_001",
+        "sku": "WBHP-001",
+        "productName": "Wireless Bluetooth Headphones Pro",
+        "quantityRequired": 25,
+        "quantityPicked": 15,
+        "quantityPacked": 0,
+        "location": "A1-01-R1-B01",
+        "status": "in_progress"
+      },
+      {
+        "id": "wali_004",
+        "productId": "prod_003",
+        "sku": "OCTS-001",
+        "productName": "Organic Cotton T-Shirt",
+        "quantityRequired": 50,
+        "quantityPicked": 50,
+        "quantityPacked": 25,
+        "location": "B1-01-R1-B01",
+        "status": "in_progress"
+      }
+    ],
+    "startedAt": "2026-02-27T08:00:00Z",
+    "completedAt": null,
+    "createdAt": "2026-02-27T07:00:00Z",
+    "updatedAt": "2026-02-27T10:30:00Z"
+  },
+  {
+    "id": "wa_003",
+    "type": "cycle_count",
+    "priority": "normal",
+    "status": "completed",
+    "warehouseId": "wh_002",
+    "warehouseName": "West Coast Hub",
+    "reference": "CC-2026-02-W2",
+    "referenceType": "cycle_count",
+    "description": "Monthly cycle count for W2 zone",
+    "assignedTo": "emp_203",
+    "lineItems": [
+      {
+        "id": "wali_005",
+        "productId": "prod_005",
+        "sku": "LLB-001",
+        "productName": "Leather Laptop Bag",
+        "quantityExpected": 52,
+        "quantityCounted": 50,
+        "variance": -2,
+        "location": "W2-01-R1-B01",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-02-22T09:00:00Z",
+    "completedAt": "2026-02-22T11:00:00Z",
+    "createdAt": "2026-02-22T08:00:00Z",
+    "updatedAt": "2026-02-22T11:00:00Z"
+  },
+  {
+    "id": "wa_004",
+    "type": "transfer_out",
+    "priority": "high",
+    "status": "completed",
+    "warehouseId": "wh_001",
+    "warehouseName": "Main Distribution Center",
+    "reference": "ST-2026-0001",
+    "referenceType": "stock_transfer",
+    "description": "Transfer to West Coast Hub",
+    "assignedTo": "emp_204",
+    "lineItems": [
+      {
+        "id": "wali_006",
+        "productId": "prod_001",
+        "sku": "WBHP-001",
+        "productName": "Wireless Bluetooth Headphones Pro",
+        "quantityRequired": 100,
+        "quantityPicked": 100,
+        "quantityShipped": 100,
+        "location": "A1-01-R1-B01",
+        "status": "completed"
+      },
+      {
+        "id": "wali_007",
+        "productId": "prod_002",
+        "sku": "SWS5-001",
+        "productName": "Smart Watch Series 5",
+        "quantityRequired": 25,
+        "quantityPicked": 25,
+        "quantityShipped": 25,
+        "location": "A1-01-R2-B01",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-02-14T08:00:00Z",
+    "completedAt": "2026-02-14T12:00:00Z",
+    "createdAt": "2026-02-14T06:00:00Z",
+    "updatedAt": "2026-02-14T12:00:00Z"
+  },
+  {
+    "id": "wa_005",
+    "type": "put_away",
+    "priority": "normal",
+    "status": "completed",
+    "warehouseId": "wh_003",
+    "warehouseName": "South Distribution",
+    "reference": "PO-2026-0038",
+    "referenceType": "purchase_order",
+    "description": "Put away received keyboards",
+    "assignedTo": "emp_205",
+    "lineItems": [
+      {
+        "id": "wali_008",
+        "productId": "prod_006",
+        "sku": "MKRGB-001",
+        "productName": "Mechanical Keyboard RGB",
+        "quantityReceived": 40,
+        "quantityPutAway": 40,
+        "location": "S1-01-R1-B01",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-02-16T10:00:00Z",
+    "completedAt": "2026-02-16T12:00:00Z",
+    "createdAt": "2026-02-16T09:00:00Z",
+    "updatedAt": "2026-02-16T12:00:00Z"
+  },
+  {
+    "id": "wa_006",
+    "type": "return_processing",
+    "priority": "medium",
+    "status": "pending",
+    "warehouseId": "wh_004",
+    "warehouseName": "Chicago Facility",
+    "reference": "RMA-2026-0156",
+    "referenceType": "return",
+    "description": "Process customer returns",
+    "assignedTo": "emp_206",
+    "lineItems": [
+      {
+        "id": "wali_009",
+        "productId": "prod_007",
+        "sku": "YMP-001",
+        "productName": "Yoga Mat Premium",
+        "quantityReturned": 5,
+        "quantityInspected": 0,
+        "quantityRestocked": 0,
+        "quantityDisposed": 0,
+        "location": "M1-01-R1-B02",
+        "status": "pending"
+      },
+      {
+        "id": "wali_010",
+        "productId": "prod_008",
+        "sku": "SSWB-001",
+        "productName": "Stainless Steel Water Bottle",
+        "quantityReturned": 5,
+        "quantityInspected": 0,
+        "quantityRestocked": 0,
+        "quantityDisposed": 0,
+        "location": "M1-01-R2-B02",
+        "status": "pending"
+      }
+    ],
+    "startedAt": null,
+    "completedAt": null,
+    "createdAt": "2026-02-26T15:00:00Z",
+    "updatedAt": "2026-02-26T15:00:00Z"
+  },
+  {
+    "id": "wa_007",
+    "type": "picking",
+    "priority": "urgent",
+    "status": "completed",
+    "warehouseId": "wh_002",
+    "warehouseName": "West Coast Hub",
+    "reference": "SO-2026-0278",
+    "referenceType": "sales_order",
+    "description": "Express order for VIP customer",
+    "assignedTo": "emp_207",
+    "lineItems": [
+      {
+        "id": "wali_011",
+        "productId": "prod_004",
+        "sku": "RSP-001",
+        "productName": "Running Shoes Pro",
+        "quantityRequired": 10,
+        "quantityPicked": 10,
+        "quantityPacked": 10,
+        "location": "W1-01-R1-B01",
+        "status": "completed"
+      },
+      {
+        "id": "wali_012",
+        "productId": "prod_005",
+        "sku": "LLB-001",
+        "productName": "Leather Laptop Bag",
+        "quantityRequired": 3,
+        "quantityPicked": 3,
+        "quantityPacked": 3,
+        "location": "W2-01-R1-B01",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-02-24T08:00:00Z",
+    "completedAt": "2026-02-24T10:30:00Z",
+    "createdAt": "2026-02-24T07:30:00Z",
+    "updatedAt": "2026-02-24T10:30:00Z"
+  }
+]

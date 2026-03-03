@@ -1,0 +1,33 @@
+{
+  "groups": [
+    {
+      "name": "app.file",
+      "type": "com.commerce_pro_backend.common.storage.FileStorageProperties",
+      "sourceType": "com.commerce_pro_backend.common.storage.FileStorageProperties"
+    },
+    {
+      "name": "cors",
+      "type": "com.commerce_pro_backend.common.config.CorsProperties",
+      "sourceType": "com.commerce_pro_backend.common.config.CorsConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "app.file.upload-dir",
+      "type": "java.lang.String",
+      "description": "Directory path for file uploads",
+      "defaultValue": "./uploads"
+    },
+    {
+      "name": "app.file.access-url",
+      "type": "java.lang.String",
+      "description": "URL path for accessing uploaded files",
+      "defaultValue": "/uploads"
+    },
+    {
+      "name": "cors.allowed-origins",
+      "type": "java.lang.String",
+      "description": "Comma-separated list of allowed CORS origins"
+    }
+  ]
+}

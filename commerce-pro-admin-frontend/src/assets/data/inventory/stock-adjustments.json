@@ -1,0 +1,197 @@
+[
+  {
+    "id": "sa_001",
+    "reference": "SA-2026-0001",
+    "type": "count",
+    "status": "completed",
+    "warehouseId": "wh_001",
+    "warehouseName": "Main Distribution Center",
+    "createdBy": "emp_105",
+    "approvedBy": "emp_101",
+    "createdAt": "2026-02-20T08:00:00Z",
+    "approvedAt": "2026-02-21T10:00:00Z",
+    "lineItems": [
+      {
+        "id": "sali_001",
+        "productId": "prod_001",
+        "productName": "Wireless Bluetooth Headphones Pro",
+        "sku": "WBHP-001",
+        "expectedQuantity": 500,
+        "actualQuantity": 495,
+        "adjustment": -5,
+        "reason": "Minor discrepancy during cycle count",
+        "binId": "bin_nyc_001"
+      },
+      {
+        "id": "sali_002",
+        "productId": "prod_003",
+        "productName": "Organic Cotton T-Shirt",
+        "sku": "OCTS-001",
+        "expectedQuantity": 1400,
+        "actualQuantity": 1385,
+        "adjustment": -15,
+        "reason": "Miscounted during previous receiving",
+        "binId": "bin_nyc_008"
+      }
+    ],
+    "totalAdjustment": -20,
+    "notes": "Monthly cycle count completed with minor discrepancies"
+  },
+  {
+    "id": "sa_002",
+    "reference": "SA-2026-0002",
+    "type": "damage",
+    "status": "completed",
+    "warehouseId": "wh_002",
+    "warehouseName": "West Coast Hub",
+    "createdBy": "emp_106",
+    "approvedBy": "emp_102",
+    "createdAt": "2026-02-22T09:30:00Z",
+    "approvedAt": "2026-02-22T14:00:00Z",
+    "lineItems": [
+      {
+        "id": "sali_003",
+        "productId": "prod_005",
+        "productName": "Leather Laptop Bag",
+        "sku": "LLB-001",
+        "expectedQuantity": 52,
+        "actualQuantity": 50,
+        "adjustment": -2,
+        "reason": "Scratched leather due to improper stacking",
+        "binId": "bin_la_008"
+      }
+    ],
+    "totalAdjustment": -2,
+    "notes": "Damaged items moved to quarantine area for disposal"
+  },
+  {
+    "id": "sa_003",
+    "reference": "SA-2026-0003",
+    "type": "receiving",
+    "status": "completed",
+    "warehouseId": "wh_001",
+    "warehouseName": "Main Distribution Center",
+    "createdBy": "emp_107",
+    "approvedBy": "emp_101",
+    "createdAt": "2026-02-15T10:30:00Z",
+    "approvedAt": "2026-02-15T11:00:00Z",
+    "lineItems": [
+      {
+        "id": "sali_004",
+        "productId": "prod_001",
+        "productName": "Wireless Bluetooth Headphones Pro",
+        "sku": "WBHP-001",
+        "expectedQuantity": 0,
+        "actualQuantity": 200,
+        "adjustment": 200,
+        "reason": "Regular PO receipt from TechCorp Industries",
+        "binId": "bin_nyc_002"
+      },
+      {
+        "id": "sali_005",
+        "productId": "prod_002",
+        "productName": "Smart Watch Series 5",
+        "sku": "SWS5-001",
+        "expectedQuantity": 0,
+        "actualQuantity": 50,
+        "adjustment": 50,
+        "reason": "Regular PO receipt from TechCorp Industries",
+        "binId": "bin_nyc_005"
+      }
+    ],
+    "totalAdjustment": 250,
+    "notes": "PO #PO-2026-0042 received and put away"
+  },
+  {
+    "id": "sa_004",
+    "reference": "SA-2026-0004",
+    "type": "correction",
+    "status": "approved",
+    "warehouseId": "wh_003",
+    "warehouseName": "South Distribution",
+    "createdBy": "emp_108",
+    "approvedBy": "emp_103",
+    "createdAt": "2026-02-23T13:00:00Z",
+    "approvedAt": "2026-02-24T09:00:00Z",
+    "lineItems": [
+      {
+        "id": "sali_006",
+        "productId": "prod_006",
+        "productName": "Mechanical Keyboard RGB",
+        "sku": "MKRGB-001",
+        "expectedQuantity": 110,
+        "actualQuantity": 105,
+        "adjustment": -5,
+        "reason": "System error - duplicate entry corrected",
+        "binId": "bin_dal_001"
+      }
+    ],
+    "totalAdjustment": -5,
+    "notes": "Corrected system glitch that doubled inventory count"
+  },
+  {
+    "id": "sa_005",
+    "reference": "SA-2026-0005",
+    "type": "return",
+    "status": "pending",
+    "warehouseId": "wh_004",
+    "warehouseName": "Chicago Facility",
+    "createdBy": "emp_109",
+    "approvedBy": null,
+    "createdAt": "2026-02-26T15:00:00Z",
+    "approvedAt": null,
+    "lineItems": [
+      {
+        "id": "sali_007",
+        "productId": "prod_007",
+        "productName": "Yoga Mat Premium",
+        "sku": "YMP-001",
+        "expectedQuantity": 370,
+        "actualQuantity": 380,
+        "adjustment": 10,
+        "reason": "Customer return - defective product received back",
+        "binId": "bin_chi_002"
+      },
+      {
+        "id": "sali_008",
+        "productId": "prod_008",
+        "productName": "Stainless Steel Water Bottle",
+        "sku": "SSWB-001",
+        "expectedQuantity": 680,
+        "actualQuantity": 690,
+        "adjustment": 10,
+        "reason": "Customer return - wrong color ordered",
+        "binId": "bin_chi_004"
+      }
+    ],
+    "totalAdjustment": 20,
+    "notes": "Returns processing awaiting quality check approval"
+  },
+  {
+    "id": "sa_006",
+    "reference": "SA-2026-0006",
+    "type": "transfer",
+    "status": "draft",
+    "warehouseId": "wh_002",
+    "warehouseName": "West Coast Hub",
+    "createdBy": "emp_106",
+    "approvedBy": null,
+    "createdAt": "2026-02-27T14:00:00Z",
+    "approvedAt": null,
+    "lineItems": [
+      {
+        "id": "sali_009",
+        "productId": "prod_004",
+        "productName": "Running Shoes Pro",
+        "sku": "RSP-001",
+        "expectedQuantity": 210,
+        "actualQuantity": 210,
+        "adjustment": -40,
+        "reason": "Transfer to Chicago Facility",
+        "binId": "bin_la_001"
+      }
+    ],
+    "totalAdjustment": -40,
+    "notes": "Draft adjustment for stock transfer ST-2026-0003"
+  }
+]

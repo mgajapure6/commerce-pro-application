@@ -1,0 +1,534 @@
+<!-- Low Stock Alerts Component - UI Guidelines Compliant -->
+<div class="min-h-screen bg-gray-50/50 p-4 sm:p-6 lg:p-8">
+    <div class="max-w-[1600px] mx-auto space-y-6">
+        
+        <!-- Header Section -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-bold text-gray-900">Low Stock Alerts</h1>
+                    @if ((stats().unreadAlerts || 0) > 0) {
+                    <span class="px-3 py-1 bg-red-100 text-red-700 text-sm font-medium rounded-full animate-pulse">
+                        {{ stats().unreadAlerts }} new
+                    </span>
+                    }
+                </div>
+                <p class="text-gray-500 mt-1 text-sm">Monitor inventory levels, manage reorder points, and automate purchase decisions</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <button (click)="setView('dashboard')"
+                    class="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
+                    [class.bg-indigo-600]="activeView() === 'dashboard'"
+                    [class.text-white]="activeView() === 'dashboard'" 
+                    [class.bg-white]="activeView() !== 'dashboard'"
+                    [class.text-gray-700]="activeView() !== 'dashboard'" 
+                    [class.border]="activeView() !== 'dashboard'"
+                    [class.border-gray-200]="activeView() !== 'dashboard'"
+                    [class.shadow-sm]="activeView() !== 'dashboard'">
+                    <i class="bi bi-speedometer2"></i>
+                    Dashboard
+                </button>
+                <button (click)="setView('alerts')"
+                    class="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
+                    [class.bg-indigo-600]="activeView() === 'alerts'" 
+                    [class.text-white]="activeView() === 'alerts'"
+                    [class.bg-white]="activeView() !== 'alerts'" 
+                    [class.text-gray-700]="activeView() !== 'alerts'"
+                    [class.border]="activeView() !== 'alerts'" 
+                    [class.border-gray-200]="activeView() !== 'alerts'"
+                    [class.shadow-sm]="activeView() !== 'alerts'">
+                    <i class="bi bi-bell"></i>
+                    Alerts
+                    @if ((stats().unreadAlerts || 0) > 0) {
+                    <span class="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">{{ stats().unreadAlerts }}</span>
+                    }
+                </button>
+                <button (click)="setView('suggestions')"
+                    class="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
+                    [class.bg-indigo-600]="activeView() === 'suggestions'"
+                    [class.text-white]="activeView() === 'suggestions'"
+                    [class.bg-white]="activeView() !== 'suggestions'"
+                    [class.text-gray-700]="activeView() !== 'suggestions'"
+                    [class.border]="activeView() !== 'suggestions'"
+                    [class.border-gray-200]="activeView() !== 'suggestions'"
+                    [class.shadow-sm]="activeView() !== 'suggestions'">
+                    <i class="bi bi-cart-plus"></i>
+                    Suggestions
+                    @if ((stats().poSuggestions || 0) > 0) {
+                    <span class="bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">{{ stats().poSuggestions }}</span>
+                    }
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        @if (activeView() === 'dashboard') {
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            @for (stat of displayStats(); track stat.label) {
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{{ stat.label }}</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center {{ stat.bgColor }}">
+                        <i class="bi bi-{{ stat.icon }} {{ stat.iconColor }} text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+
+        <!-- Filters Bar -->
+        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="relative flex-1 min-w-[200px]">
+                    <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" 
+                        [(ngModel)]="searchQuery"
+                        placeholder="Search products, SKUs..."
+                        class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                
+                <select [(ngModel)]="filterStatus" 
+                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="all">All Status</option>
+                    <option value="CRITICAL">Critical</option>
+                    <option value="LOW">Low</option>
+                    <option value="REORDER">Reorder</option>
+                </select>
+                
+                <select [(ngModel)]="filterWarehouse"
+                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="all">All Warehouses</option>
+                    @for (warehouse of warehouses(); track warehouse.id) {
+                    <option [value]="warehouse.id">{{ warehouse.name }}</option>
+                    }
+                </select>
+                
+                <label class="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 cursor-pointer">
+                    <input type="checkbox" [(ngModel)]="showOnlyUnacknowledged" class="rounded border-gray-300">
+                    Unacknowledged only
+                </label>
+            </div>
+        </div>
+
+        <!-- Bulk Actions Bar -->
+        @if (selectedAlertIds().length > 0) {
+        <div class="bg-indigo-600 text-white rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-slide-up shadow-lg shadow-indigo-200">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                    <i class="bi bi-check-square text-xl"></i>
+                </div>
+                <div>
+                    <p class="font-semibold">{{ selectedAlertIds().length }} alerts selected</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button (click)="acknowledgeSelected()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm">
+                    <i class="bi bi-check-lg mr-1"></i> Acknowledge
+                </button>
+                <button (click)="deselectAll()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm">
+                    Cancel
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- Loading State -->
+        @if (isLoading()) {
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+            <div class="animate-pulse space-y-4">
+                <div class="w-16 h-16 bg-gray-200 rounded-2xl mx-auto"></div>
+                <div class="h-4 bg-gray-200 rounded w-48 mx-auto"></div>
+                <div class="h-3 bg-gray-200 rounded w-32 mx-auto"></div>
+            </div>
+        </div>
+        }
+
+        <!-- Error State -->
+        @if (hasError() && !isLoading()) {
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="bi bi-exclamation-triangle text-2xl text-red-600"></i>
+            </div>
+            <p class="text-gray-600 font-medium mb-1">Failed to load alerts</p>
+            <button (click)="retry()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg mt-4">
+                <i class="bi bi-arrow-clockwise mr-2"></i>Retry
+            </button>
+        </div>
+        }
+
+        <!-- Content: Dashboard View -->
+        @if (activeView() === 'dashboard' && !isLoading() && !hasError()) {
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Critical Alerts Card -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-900">Critical Alerts</h2>
+                    <p class="text-sm text-gray-500 mt-1">Items requiring immediate attention</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    @for (alert of criticalAlerts().slice(0, 5); track alert.id) {
+                    <div class="flex items-center gap-4 p-4 bg-red-50 rounded-xl border border-red-100">
+                        <img [src]="alert.productImage || 'assets/placeholder-product.png'" 
+                            class="w-12 h-12 rounded-lg object-cover bg-gray-100">
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-gray-900 truncate">{{ alert.productName }}</p>
+                            <p class="text-sm text-gray-500">{{ alert.productSku }} • {{ alert.warehouseName }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-red-600">{{ alert.currentStock }}</p>
+                            <p class="text-xs text-gray-500">of {{ alert.lowStockThreshold }}</p>
+                        </div>
+                    </div>
+                    } @empty {
+                    <div class="text-center py-8">
+                        <i class="bi bi-check-circle text-4xl text-green-500 mb-2"></i>
+                        <p class="text-gray-500">No critical alerts</p>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Reorder Suggestions Card -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-900">Reorder Suggestions</h2>
+                    <p class="text-sm text-gray-500 mt-1">Recommended purchase orders</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    @for (suggestion of poSuggestions().slice(0, 5); track suggestion.id) {
+                    <div class="flex items-center gap-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <i class="bi bi-cart-plus text-blue-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-gray-900 truncate">{{ suggestion.productName }}</p>
+                            <p class="text-sm text-gray-500">{{ suggestion.sku }} • {{ suggestion.supplierName }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-blue-600">{{ suggestion.suggestedQuantity }}</p>
+                            <p class="text-xs text-gray-500">units</p>
+                        </div>
+                        <button (click)="createPOFromSuggestion(suggestion)" 
+                            class="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
+                            Create PO
+                        </button>
+                    </div>
+                    } @empty {
+                    <div class="text-center py-8">
+                        <i class="bi bi-inbox text-4xl text-gray-300 mb-2"></i>
+                        <p class="text-gray-500">No suggestions</p>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- Content: Alerts Table View -->
+        @if (activeView() === 'alerts' && !isLoading() && !hasError()) {
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50/50 border-b border-gray-100">
+                        <tr>
+                            <th class="px-4 py-4 text-left">
+                                <input type="checkbox" 
+                                    [checked]="selectedAlertIds().length === filteredAlerts().length && filteredAlerts().length > 0"
+                                    (change)="$event.target.checked ? selectAll() : deselectAll()"
+                                    class="rounded border-gray-300">
+                            </th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Warehouse</th>
+                            <th class="px-4 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-4 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Stock Level</th>
+                            <th class="px-4 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Days Left</th>
+                            <th class="px-4 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @for (alert of filteredAlerts(); track alert.id) {
+                        <tr class="group hover:bg-gray-50/50 transition-colors"
+                            [class.bg-red-50]="!alert.isRead && alert.status === 'CRITICAL'">
+                            <td class="px-4 py-4">
+                                <input type="checkbox" 
+                                    [checked]="isSelected(alert.id)"
+                                    (change)="toggleAlertSelection(alert.id)"
+                                    class="rounded border-gray-300">
+                            </td>
+                            <td class="px-4 py-4">
+                                <div class="flex items-center gap-3">
+                                    <img [src]="alert.productImage || 'assets/placeholder-product.png'"
+                                        class="w-10 h-10 rounded-lg object-cover bg-gray-100">
+                                    <div>
+                                        <p class="font-medium text-gray-900 text-sm">{{ alert.productName }}</p>
+                                        <p class="text-xs text-gray-500">{{ alert.productSku }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4">
+                                <span class="text-sm text-gray-700">{{ alert.warehouseName }}</span>
+                            </td>
+                            <td class="px-4 py-4 text-center">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border"
+                                    [class]="getStatusColor(alert.status)">
+                                    <i class="bi bi-{{ getStatusIcon(alert.status) }} mr-1"></i>
+                                    {{ alert.status }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-4 text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full rounded-full transition-all" 
+                                            [class]="getProgressColor(calculateProgress(alert))"
+                                            [style.width.%]="calculateProgress(alert)"></div>
+                                    </div>
+                                    <span class="text-sm font-medium" 
+                                        [class.text-red-600]="alert.currentStock < alert.lowStockThreshold * 0.5"
+                                        [class.text-orange-600]="alert.currentStock >= alert.lowStockThreshold * 0.5 && alert.currentStock < alert.lowStockThreshold"
+                                        [class.text-gray-900]="alert.currentStock >= alert.lowStockThreshold">
+                                        {{ alert.currentStock }}/{{ alert.lowStockThreshold }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-center">
+                                <span class="text-sm" [class]="getDaysColor(alert.daysUntilStockout)">
+                                    {{ alert.daysUntilStockout || '-' }} days
+                                </span>
+                            </td>
+                            <td class="px-4 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    @if (!alert.acknowledged) {
+                                    <button (click)="acknowledgeAlert(alert)" 
+                                        class="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                                        title="Acknowledge">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    }
+                                    <button (click)="createPOFromAlert(alert)" 
+                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                                        title="Create PO">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                    <button (click)="openSettings(alert)" 
+                                        class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                                        title="Settings">
+                                        <i class="bi bi-gear"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        } @empty {
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center">
+                                <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <i class="bi bi-inbox text-gray-400 text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">No alerts found</h3>
+                                <p class="text-gray-500 mb-4">Try adjusting your filters</p>
+                                <button (click)="searchQuery.set(''); filterStatus.set('all')" 
+                                    class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
+                                    Clear Filters
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        }
+
+        <!-- Content: Suggestions View -->
+        @if (activeView() === 'suggestions' && !isLoading() && !hasError()) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @for (suggestion of poSuggestions(); track suggestion.id) {
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <i class="bi bi-cart-plus text-blue-600 text-xl"></i>
+                    </div>
+                    <span class="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                        {{ suggestion.leadTimeDays }} days lead
+                    </span>
+                </div>
+                
+                <h3 class="font-semibold text-gray-900 mb-1">{{ suggestion.productName }}</h3>
+                <p class="text-sm text-gray-500 mb-4">{{ suggestion.sku }}</p>
+                
+                <div class="space-y-2 text-sm mb-4">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Current Stock:</span>
+                        <span class="font-medium">{{ suggestion.currentStock }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Suggested Qty:</span>
+                        <span class="font-medium text-blue-600">{{ suggestion.suggestedQuantity }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Unit Cost:</span>
+                        <span class="font-medium">{{ formatCurrency(suggestion.unitCost) }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Total Cost:</span>
+                        <span class="font-medium">{{ formatCurrency(suggestion.totalCost) }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Supplier:</span>
+                        <span class="font-medium">{{ suggestion.supplierName || suggestion.supplier || 'N/A' }}</span>
+                    </div>
+                </div>
+                
+                <button (click)="createPOFromSuggestion(suggestion)" 
+                    class="w-full py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors">
+                    Create Purchase Order
+                </button>
+            </div>
+            } @empty {
+            <div class="col-span-full py-12 text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="bi bi-inbox text-gray-400 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-1">No suggestions</h3>
+                <p class="text-gray-500">All stock levels are adequate</p>
+            </div>
+            }
+        </div>
+        }
+
+    </div>
+</div>
+
+<!-- Acknowledge Modal -->
+@if (showAcknowledgeModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Acknowledge Alert</h2>
+            <button (click)="showAcknowledgeModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Are you sure you want to acknowledge this alert for <strong>{{ selectedAlert()?.productName }}</strong>?</p>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showAcknowledgeModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmAcknowledge()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                Acknowledge
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Resolve Modal -->
+@if (showResolveModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Resolve Alert</h2>
+            <button (click)="showResolveModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600">Mark this alert as resolved for <strong>{{ selectedAlert()?.productName }}</strong>?</p>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showResolveModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmResolve()" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                Resolve
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Settings Modal -->
+@if (showSettingsModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Alert Settings</h2>
+            <button (click)="closeSettingsModal()" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Reorder Point</label>
+                <input type="number" formControlName="reorderPoint" 
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Reorder Quantity</label>
+                <input type="number" formControlName="reorderQuantity"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Safety Stock</label>
+                <input type="number" formControlName="safetyStock"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Low Stock Threshold</label>
+                <input type="number" formControlName="lowStockThreshold"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="closeSettingsModal()" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="saveSettings()" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Create PO Modal -->
+@if (showCreatePOModal()) {
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg animate-slide-up">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h2 class="text-lg font-semibold text-gray-900">Create Purchase Order</h2>
+            <button (click)="showCreatePOModal.set(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 space-y-4" [formGroup]="poForm">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
+                <input type="text" formControlName="supplier"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                <input type="number" formControlName="quantity"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Unit Cost</label>
+                <input type="number" formControlName="unitCost"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <textarea formControlName="notes" rows="3"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+            <button (click)="showCreatePOModal.set(false)" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button (click)="confirmCreatePO()" [disabled]="poForm.invalid"
+                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                Create PO
+            </button>
+        </div>
+    </div>
+</div>
+}

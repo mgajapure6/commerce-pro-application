@@ -1,0 +1,122 @@
+[
+  {
+    "id": "sup_001",
+    "code": "TCI-001",
+    "name": "TechCorp Industries",
+    "contact": {
+      "email": "orders@techcorp.com",
+      "phone": "+1-555-0101",
+      "fax": "+1-555-0102",
+      "website": "https://www.techcorp.com"
+    },
+    "address": {
+      "street": "2500 Technology Drive",
+      "city": "San Jose",
+      "state": "CA",
+      "zipCode": "95134",
+      "country": "USA"
+    },
+    "paymentTerms": "Net 30",
+    "currency": "USD",
+    "leadTime": {
+      "standard": 14,
+      "expedited": 7
+    },
+    "minOrderValue": 1000,
+    "rating": 4.8,
+    "status": "active",
+    "certifications": ["ISO 9001", "ISO 14001"],
+    "createdAt": "2019-06-15T08:00:00Z",
+    "updatedAt": "2025-12-01T10:30:00Z"
+  },
+  {
+    "id": "sup_002",
+    "code": "GSC-002",
+    "name": "Global Supply Co",
+    "contact": {
+      "email": "procurement@globalsupply.com",
+      "phone": "+1-555-0201",
+      "fax": "+1-555-0202",
+      "website": "https://www.globalsupply.com"
+    },
+    "address": {
+      "street": "1800 Commerce Street",
+      "city": "Chicago",
+      "state": "IL",
+      "zipCode": "60601",
+      "country": "USA"
+    },
+    "paymentTerms": "Net 45",
+    "currency": "USD",
+    "leadTime": {
+      "standard": 21,
+      "expedited": 10
+    },
+    "minOrderValue": 500,
+    "rating": 4.5,
+    "status": "active",
+    "certifications": ["ISO 9001"],
+    "createdAt": "2020-02-20T09:00:00Z",
+    "updatedAt": "2025-11-15T14:20:00Z"
+  },
+  {
+    "id": "sup_003",
+    "code": "PPL-003",
+    "name": "Premium Parts Ltd",
+    "contact": {
+      "email": "sales@premiumparts.com",
+      "phone": "+1-555-0301",
+      "fax": "+1-555-0302",
+      "website": "https://www.premiumparts.com"
+    },
+    "address": {
+      "street": "3400 Quality Way",
+      "city": "Austin",
+      "state": "TX",
+      "zipCode": "78701",
+      "country": "USA"
+    },
+    "paymentTerms": "Net 15",
+    "currency": "USD",
+    "leadTime": {
+      "standard": 10,
+      "expedited": 5
+    },
+    "minOrderValue": 2000,
+    "rating": 4.9,
+    "status": "active",
+    "certifications": ["ISO 9001", "ISO 14001", "B Corp"],
+    "createdAt": "2018-09-10T11:00:00Z",
+    "updatedAt": "2026-01-10T09:45:00Z"
+  },
+  {
+    "id": "sup_004",
+    "code": "BWS-004",
+    "name": "Budget Wholesale",
+    "contact": {
+      "email": "orders@budgetwholesale.com",
+      "phone": "+1-555-0401",
+      "fax": "+1-555-0402",
+      "website": "https://www.budgetwholesale.com"
+    },
+    "address": {
+      "street": "5000 Wholesale Blvd",
+      "city": "Phoenix",
+      "state": "AZ",
+      "zipCode": "85001",
+      "country": "USA"
+    },
+    "paymentTerms": "Net 60",
+    "currency": "USD",
+    "leadTime": {
+      "standard": 30,
+      "expedited": 14
+    },
+    "minOrderValue": 300,
+    "rating": 4.2,
+    "status": "active",
+    "certifications": [],
+    "createdAt": "2020-08-05T10:00:00Z",
+    "updatedAt": "2025-10-20T16:00:00Z"
+  }
+]

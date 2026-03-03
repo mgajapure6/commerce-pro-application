@@ -1,0 +1,200 @@
+[
+  {
+    "id": "df_001",
+    "productId": "prod_001",
+    "productName": "Wireless Bluetooth Headphones Pro",
+    "sku": "WBHP-001",
+    "warehouseId": "wh_001",
+    "forecastPeriod": {
+      "startDate": "2026-03-01",
+      "endDate": "2026-03-30",
+      "days": 30
+    },
+    "historicalData": [
+      { "date": "2025-08-01", "actualDemand": 145, "movingAverage": 140 },
+      { "date": "2025-09-01", "actualDemand": 152, "movingAverage": 148 },
+      { "date": "2025-10-01", "actualDemand": 168, "movingAverage": 155 },
+      { "date": "2025-11-01", "actualDemand": 195, "movingAverage": 172 },
+      { "date": "2025-12-01", "actualDemand": 285, "movingAverage": 216 },
+      { "date": "2026-01-01", "actualDemand": 220, "movingAverage": 232 }
+    ],
+    "forecasts": [
+      { "date": "2026-03-01", "predicted": 205, "confidence": 0.85 },
+      { "date": "2026-03-02", "predicted": 198, "confidence": 0.84 },
+      { "date": "2026-03-03", "predicted": 212, "confidence": 0.83 },
+      { "date": "2026-03-04", "predicted": 225, "confidence": 0.82 },
+      { "date": "2026-03-05", "predicted": 230, "confidence": 0.81 },
+      { "date": "2026-03-10", "predicted": 245, "confidence": 0.78 },
+      { "date": "2026-03-15", "predicted": 260, "confidence": 0.75 },
+      { "date": "2026-03-20", "predicted": 275, "confidence": 0.72 },
+      { "date": "2026-03-25", "predicted": 290, "confidence": 0.70 },
+      { "date": "2026-03-30", "predicted": 305, "confidence": 0.68 }
+    ],
+    "trend": "up",
+    "growthRate": 12.5,
+    "seasonality": true,
+    "seasonalityFactor": 1.35,
+    "confidence": 0.78,
+    "alertLevel": "normal",
+    "recommendedReorderPoint": 180,
+    "recommendedOrderQuantity": 350,
+    "createdAt": "2026-02-25T00:00:00Z",
+    "updatedAt": "2026-02-27T00:00:00Z"
+  },
+  {
+    "id": "df_002",
+    "productId": "prod_002",
+    "productName": "Smart Watch Series 5",
+    "sku": "SWS5-001",
+    "warehouseId": "wh_001",
+    "forecastPeriod": {
+      "startDate": "2026-03-01",
+      "endDate": "2026-03-30",
+      "days": 30
+    },
+    "historicalData": [
+      { "date": "2025-08-01", "actualDemand": 45, "movingAverage": 42 },
+      { "date": "2025-09-01", "actualDemand": 48, "movingAverage": 45 },
+      { "date": "2025-10-01", "actualDemand": 52, "movingAverage": 48 },
+      { "date": "2025-11-01", "actualDemand": 58, "movingAverage": 51 },
+      { "date": "2025-12-01", "actualDemand": 75, "movingAverage": 59 },
+      { "date": "2026-01-01", "actualDemand": 62, "movingAverage": 61 }
+    ],
+    "forecasts": [
+      { "date": "2026-03-01", "predicted": 55, "confidence": 0.82 },
+      { "date": "2026-03-05", "predicted": 52, "confidence": 0.80 },
+      { "date": "2026-03-10", "predicted": 48, "confidence": 0.76 },
+      { "date": "2026-03-15", "predicted": 45, "confidence": 0.73 },
+      { "date": "2026-03-20", "predicted": 42, "confidence": 0.70 },
+      { "date": "2026-03-25", "predicted": 40, "confidence": 0.68 },
+      { "date": "2026-03-30", "predicted": 38, "confidence": 0.65 }
+    ],
+    "trend": "down",
+    "growthRate": -8.5,
+    "seasonality": true,
+    "seasonalityFactor": 0.95,
+    "confidence": 0.74,
+    "alertLevel": "low",
+    "recommendedReorderPoint": 40,
+    "recommendedOrderQuantity": 80,
+    "createdAt": "2026-02-25T00:00:00Z",
+    "updatedAt": "2026-02-27T00:00:00Z"
+  },
+  {
+    "id": "df_003",
+    "productId": "prod_003",
+    "productName": "Organic Cotton T-Shirt",
+    "sku": "OCTS-001",
+    "warehouseId": "wh_001",
+    "forecastPeriod": {
+      "startDate": "2026-03-01",
+      "endDate": "2026-03-30",
+      "days": 30
+    },
+    "historicalData": [
+      { "date": "2025-08-01", "actualDemand": 320, "movingAverage": 310 },
+      { "date": "2025-09-01", "actualDemand": 335, "movingAverage": 322 },
+      { "date": "2025-10-01", "actualDemand": 328, "movingAverage": 328 },
+      { "date": "2025-11-01", "actualDemand": 340, "movingAverage": 331 },
+      { "date": "2025-12-01", "actualDemand": 380, "movingAverage": 341 },
+      { "date": "2026-01-01", "actualDemand": 350, "movingAverage": 346 }
+    ],
+    "forecasts": [
+      { "date": "2026-03-01", "predicted": 355, "confidence": 0.88 },
+      { "date": "2026-03-05", "predicted": 358, "confidence": 0.87 },
+      { "date": "2026-03-10", "predicted": 360, "confidence": 0.85 },
+      { "date": "2026-03-15", "predicted": 362, "confidence": 0.83 },
+      { "date": "2026-03-20", "predicted": 365, "confidence": 0.81 },
+      { "date": "2026-03-25", "predicted": 368, "confidence": 0.79 },
+      { "date": "2026-03-30", "predicted": 370, "confidence": 0.77 }
+    ],
+    "trend": "stable",
+    "growthRate": 2.1,
+    "seasonality": false,
+    "seasonalityFactor": 1.0,
+    "confidence": 0.83,
+    "alertLevel": "normal",
+    "recommendedReorderPoint": 420,
+    "recommendedOrderQuantity": 600,
+    "createdAt": "2026-02-25T00:00:00Z",
+    "updatedAt": "2026-02-27T00:00:00Z"
+  },
+  {
+    "id": "df_004",
+    "productId": "prod_006",
+    "productName": "Mechanical Keyboard RGB",
+    "sku": "MKRGB-001",
+    "warehouseId": "wh_003",
+    "forecastPeriod": {
+      "startDate": "2026-03-01",
+      "endDate": "2026-03-30",
+      "days": 30
+    },
+    "historicalData": [
+      { "date": "2025-08-01", "actualDemand": 25, "movingAverage": 24 },
+      { "date": "2025-09-01", "actualDemand": 28, "movingAverage": 26 },
+      { "date": "2025-10-01", "actualDemand": 35, "movingAverage": 29 },
+      { "date": "2025-11-01", "actualDemand": 42, "movingAverage": 33 },
+      { "date": "2025-12-01", "actualDemand": 65, "movingAverage": 41 },
+      { "date": "2026-01-01", "actualDemand": 48, "movingAverage": 44 }
+    ],
+    "forecasts": [
+      { "date": "2026-03-01", "predicted": 52, "confidence": 0.80 },
+      { "date": "2026-03-05", "predicted": 58, "confidence": 0.78 },
+      { "date": "2026-03-10", "predicted": 65, "confidence": 0.75 },
+      { "date": "2026-03-15", "predicted": 72, "confidence": 0.72 },
+      { "date": "2026-03-20", "predicted": 80, "confidence": 0.69 },
+      { "date": "2026-03-25", "predicted": 88, "confidence": 0.66 },
+      { "date": "2026-03-30", "predicted": 95, "confidence": 0.63 }
+    ],
+    "trend": "up",
+    "growthRate": 22.3,
+    "seasonality": true,
+    "seasonalityFactor": 1.25,
+    "confidence": 0.72,
+    "alertLevel": "high",
+    "recommendedReorderPoint": 60,
+    "recommendedOrderQuantity": 120,
+    "createdAt": "2026-02-25T00:00:00Z",
+    "updatedAt": "2026-02-27T00:00:00Z"
+  },
+  {
+    "id": "df_005",
+    "productId": "prod_007",
+    "productName": "Yoga Mat Premium",
+    "sku": "YMP-001",
+    "warehouseId": "wh_004",
+    "forecastPeriod": {
+      "startDate": "2026-03-01",
+      "endDate": "2026-03-30",
+      "days": 30
+    },
+    "historicalData": [
+      { "date": "2025-08-01", "actualDemand": 85, "movingAverage": 82 },
+      { "date": "2025-09-01", "actualDemand": 92, "movingAverage": 87 },
+      { "date": "2025-10-01", "actualDemand": 88, "movingAverage": 88 },
+      { "date": "2025-11-01", "actualDemand": 75, "movingAverage": 83 },
+      { "date": "2025-12-01", "actualDemand": 120, "movingAverage": 92 },
+      { "date": "2026-01-01", "actualDemand": 155, "movingAverage": 108 }
+    ],
+    "forecasts": [
+      { "date": "2026-03-01", "predicted": 175, "confidence": 0.82 },
+      { "date": "2026-03-05", "predicted": 185, "confidence": 0.80 },
+      { "date": "2026-03-10", "predicted": 195, "confidence": 0.77 },
+      { "date": "2026-03-15", "predicted": 205, "confidence": 0.74 },
+      { "date": "2026-03-20", "predicted": 215, "confidence": 0.71 },
+      { "date": "2026-03-25", "predicted": 225, "confidence": 0.68 },
+      { "date": "2026-03-30", "predicted": 235, "confidence": 0.65 }
+    ],
+    "trend": "up",
+    "growthRate": 35.0,
+    "seasonality": true,
+    "seasonalityFactor": 1.45,
+    "confidence": 0.74,
+    "alertLevel": "critical",
+    "recommendedReorderPoint": 200,
+    "recommendedOrderQuantity": 400,
+    "createdAt": "2026-02-25T00:00:00Z",
+    "updatedAt": "2026-02-27T00:00:00Z"
+  }
+]

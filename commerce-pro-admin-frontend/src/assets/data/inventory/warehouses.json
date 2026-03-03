@@ -1,0 +1,318 @@
+[
+  {
+    "id": "wh_001",
+    "code": "NYC-MAIN",
+    "name": "Main Distribution Center",
+    "location": {
+      "address": "1500 Broadway",
+      "city": "New York",
+      "state": "NY",
+      "country": "USA",
+      "zipCode": "10036",
+      "latitude": 40.7589,
+      "longitude": -73.9851
+    },
+    "managerId": "emp_101",
+    "status": "active",
+    "capacity": {
+      "total": 50000,
+      "used": 38500,
+      "available": 11500
+    },
+    "zones": [
+      {
+        "id": "zone_nyc_01",
+        "code": "A1",
+        "name": "Electronics Zone",
+        "aisles": [
+          {
+            "id": "aisle_nyc_01_01",
+            "code": "A1-01",
+            "racks": [
+              {
+                "id": "rack_nyc_01_01_01",
+                "code": "A1-01-R1",
+                "bins": [
+                  { "id": "bin_nyc_001", "code": "A1-01-R1-B01", "capacity": 100, "used": 75, "status": "active" },
+                  { "id": "bin_nyc_002", "code": "A1-01-R1-B02", "capacity": 100, "used": 80, "status": "active" },
+                  { "id": "bin_nyc_003", "code": "A1-01-R1-B03", "capacity": 100, "used": 0, "status": "empty" }
+                ]
+              },
+              {
+                "id": "rack_nyc_01_01_02",
+                "code": "A1-01-R2",
+                "bins": [
+                  { "id": "bin_nyc_004", "code": "A1-01-R2-B01", "capacity": 100, "used": 90, "status": "active" },
+                  { "id": "bin_nyc_005", "code": "A1-01-R2-B02", "capacity": 100, "used": 60, "status": "active" }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "aisle_nyc_01_02",
+            "code": "A1-02",
+            "racks": [
+              {
+                "id": "rack_nyc_01_02_01",
+                "code": "A1-02-R1",
+                "bins": [
+                  { "id": "bin_nyc_006", "code": "A1-02-R1-B01", "capacity": 120, "used": 45, "status": "active" },
+                  { "id": "bin_nyc_007", "code": "A1-02-R1-B02", "capacity": 120, "used": 100, "status": "full" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "zone_nyc_02",
+        "code": "B1",
+        "name": "Apparel Zone",
+        "aisles": [
+          {
+            "id": "aisle_nyc_02_01",
+            "code": "B1-01",
+            "racks": [
+              {
+                "id": "rack_nyc_02_01_01",
+                "code": "B1-01-R1",
+                "bins": [
+                  { "id": "bin_nyc_008", "code": "B1-01-R1-B01", "capacity": 200, "used": 150, "status": "active" },
+                  { "id": "bin_nyc_009", "code": "B1-01-R1-B02", "capacity": 200, "used": 180, "status": "active" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "createdAt": "2020-01-15T08:00:00Z",
+    "updatedAt": "2026-02-20T14:30:00Z"
+  },
+  {
+    "id": "wh_002",
+    "code": "LA-WEST",
+    "name": "West Coast Hub",
+    "location": {
+      "address": "4500 E Washington Blvd",
+      "city": "Los Angeles",
+      "state": "CA",
+      "country": "USA",
+      "zipCode": "90040",
+      "latitude": 34.0522,
+      "longitude": -118.2437
+    },
+    "managerId": "emp_102",
+    "status": "active",
+    "capacity": {
+      "total": 40000,
+      "used": 28000,
+      "available": 12000
+    },
+    "zones": [
+      {
+        "id": "zone_la_01",
+        "code": "W1",
+        "name": "General Merchandise",
+        "aisles": [
+          {
+            "id": "aisle_la_01_01",
+            "code": "W1-01",
+            "racks": [
+              {
+                "id": "rack_la_01_01_01",
+                "code": "W1-01-R1",
+                "bins": [
+                  { "id": "bin_la_001", "code": "W1-01-R1-B01", "capacity": 150, "used": 120, "status": "active" },
+                  { "id": "bin_la_002", "code": "W1-01-R1-B02", "capacity": 150, "used": 0, "status": "empty" },
+                  { "id": "bin_la_003", "code": "W1-01-R1-B03", "capacity": 150, "used": 85, "status": "active" }
+                ]
+              },
+              {
+                "id": "rack_la_01_01_02",
+                "code": "W1-01-R2",
+                "bins": [
+                  { "id": "bin_la_004", "code": "W1-01-R2-B01", "capacity": 150, "used": 150, "status": "full" },
+                  { "id": "bin_la_005", "code": "W1-01-R2-B02", "capacity": 150, "used": 95, "status": "active" }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "aisle_la_01_02",
+            "code": "W1-02",
+            "racks": [
+              {
+                "id": "rack_la_01_02_01",
+                "code": "W1-02-R1",
+                "bins": [
+                  { "id": "bin_la_006", "code": "W1-02-R1-B01", "capacity": 180, "used": 160, "status": "active" },
+                  { "id": "bin_la_007", "code": "W1-02-R1-B02", "capacity": 180, "used": 140, "status": "active" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "zone_la_02",
+        "code": "W2",
+        "name": "Accessories Zone",
+        "aisles": [
+          {
+            "id": "aisle_la_02_01",
+            "code": "W2-01",
+            "racks": [
+              {
+                "id": "rack_la_02_01_01",
+                "code": "W2-01-R1",
+                "bins": [
+                  { "id": "bin_la_008", "code": "W2-01-R1-B01", "capacity": 100, "used": 70, "status": "active" },
+                  { "id": "bin_la_009", "code": "W2-01-R1-B02", "capacity": 100, "used": 55, "status": "active" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "createdAt": "2021-03-10T09:00:00Z",
+    "updatedAt": "2026-02-25T11:15:00Z"
+  },
+  {
+    "id": "wh_003",
+    "code": "DAL-SOUTH",
+    "name": "South Distribution",
+    "location": {
+      "address": "3200 Irving Blvd",
+      "city": "Dallas",
+      "state": "TX",
+      "country": "USA",
+      "zipCode": "75247",
+      "latitude": 32.7767,
+      "longitude": -96.7970
+    },
+    "managerId": "emp_103",
+    "status": "active",
+    "capacity": {
+      "total": 35000,
+      "used": 22000,
+      "available": 13000
+    },
+    "zones": [
+      {
+        "id": "zone_dal_01",
+        "code": "S1",
+        "name": "Main Storage",
+        "aisles": [
+          {
+            "id": "aisle_dal_01_01",
+            "code": "S1-01",
+            "racks": [
+              {
+                "id": "rack_dal_01_01_01",
+                "code": "S1-01-R1",
+                "bins": [
+                  { "id": "bin_dal_001", "code": "S1-01-R1-B01", "capacity": 120, "used": 110, "status": "active" },
+                  { "id": "bin_dal_002", "code": "S1-01-R1-B02", "capacity": 120, "used": 65, "status": "active" },
+                  { "id": "bin_dal_003", "code": "S1-01-R1-B03", "capacity": 120, "used": 0, "status": "maintenance" }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "aisle_dal_01_02",
+            "code": "S1-02",
+            "racks": [
+              {
+                "id": "rack_dal_01_02_01",
+                "code": "S1-02-R1",
+                "bins": [
+                  { "id": "bin_dal_004", "code": "S1-02-R1-B01", "capacity": 140, "used": 130, "status": "active" },
+                  { "id": "bin_dal_005", "code": "S1-02-R1-B02", "capacity": 140, "used": 45, "status": "active" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "createdAt": "2021-08-20T10:00:00Z",
+    "updatedAt": "2026-02-22T16:45:00Z"
+  },
+  {
+    "id": "wh_004",
+    "code": "CHI-MID",
+    "name": "Chicago Facility",
+    "location": {
+      "address": "2200 S Ashland Ave",
+      "city": "Chicago",
+      "state": "IL",
+      "country": "USA",
+      "zipCode": "60608",
+      "latitude": 41.8781,
+      "longitude": -87.6298
+    },
+    "managerId": "emp_104",
+    "status": "active",
+    "capacity": {
+      "total": 30000,
+      "used": 19500,
+      "available": 10500
+    },
+    "zones": [
+      {
+        "id": "zone_chi_01",
+        "code": "M1",
+        "name": "Central Storage",
+        "aisles": [
+          {
+            "id": "aisle_chi_01_01",
+            "code": "M1-01",
+            "racks": [
+              {
+                "id": "rack_chi_01_01_01",
+                "code": "M1-01-R1",
+                "bins": [
+                  { "id": "bin_chi_001", "code": "M1-01-R1-B01", "capacity": 110, "used": 95, "status": "active" },
+                  { "id": "bin_chi_002", "code": "M1-01-R1-B02", "capacity": 110, "used": 40, "status": "active" }
+                ]
+              },
+              {
+                "id": "rack_chi_01_01_02",
+                "code": "M1-01-R2",
+                "bins": [
+                  { "id": "bin_chi_003", "code": "M1-01-R2-B01", "capacity": 110, "used": 105, "status": "active" },
+                  { "id": "bin_chi_004", "code": "M1-01-R2-B02", "capacity": 110, "used": 0, "status": "empty" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "zone_chi_02",
+        "code": "M2",
+        "name": "Cold Storage",
+        "aisles": [
+          {
+            "id": "aisle_chi_02_01",
+            "code": "M2-01",
+            "racks": [
+              {
+                "id": "rack_chi_02_01_01",
+                "code": "M2-01-R1",
+                "bins": [
+                  { "id": "bin_chi_005", "code": "M2-01-R1-B01", "capacity": 80, "used": 60, "status": "active" },
+                  { "id": "bin_chi_006", "code": "M2-01-R1-B02", "capacity": 80, "used": 30, "status": "active" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "createdAt": "2022-02-01T11:00:00Z",
+    "updatedAt": "2026-02-27T09:20:00Z"
+  }
+]

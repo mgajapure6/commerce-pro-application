@@ -1,0 +1,93 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/commerce-pro-admin-frontend/dist
+/commerce-pro-customer-frontend/dist
+/tmp
+/commerce-pro-admin-frontend/tmp
+/commerce-pro-customer-frontend/tmp
+/out-tsc
+/commerce-pro-admin-frontend/out-tsc
+/commerce-pro-customer-frontend/out-tsc
+/bazel-out
+/commerce-pro-admin-frontend/bazel-out
+/commerce-pro-customer-frontend/bazel-out
+
+# angular
+.angular/*
+/commerce-pro-admin-frontend/.angular/*
+/commerce-pro-customer-frontend/.angular/*
+
+# Node
+/node_modules
+/commerce-pro-admin-frontend/node_modules
+/commerce-pro-customer-frontend/node_modules
+npm-debug.log
+/commerce-pro-admin-frontend/npm-debug.log
+/commerce-pro-customer-frontend/npm-debug.log
+yarn-error.log
+/commerce-pro-admin-frontend/yarn-error.log
+/commerce-pro-customer-frontend/yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+/commerce-pro-admin-frontend/.vscode/*
+/commerce-pro-customer-frontend/.vscode/*
+!.vscode/settings.json
+/commerce-pro-admin-frontend/!.vscode/settings.json
+/commerce-pro-customer-frontend/!.vscode/settings.json
+!.vscode/tasks.json\
+/commerce-pro-admin-frontend/!.vscode/tasks.json\
+/commerce-pro-customer-frontend/!.vscode/tasks.json\
+!.vscode/launch.json
+/commerce-pro-admin-frontend/!.vscode/launch.json
+/commerce-pro-customer-frontend/!.vscode/launch.json
+!.vscode/extensions.json
+/commerce-pro-admin-frontend/!.vscode/extensions.json
+/commerce-pro-customer-frontend/!.vscode/extensions.json
+!.vscode/mcp.json
+/commerce-pro-admin-frontend/!.vscode/mcp.json
+/commerce-pro-customer-frontend/!.vscode/mcp.json
+.history/*
+/commerce-pro-admin-frontend/.history/*
+/commerce-pro-customer-frontend/.history/*
+
+# Miscellaneous
+.angular/cache
+/commerce-pro-admin-frontend/.angular/cache
+/commerce-pro-customer-frontend/.angular/cache
+.sass-cache/
+/commerce-pro-admin-frontend/.sass-cache/
+/commerce-pro-customer-frontend/.sass-cache/
+/connect.lock
+/commerce-pro-admin-frontend/connect.lock
+/commerce-pro-customer-frontend/connect.lock
+/coverage
+/commerce-pro-admin-frontend/coverage
+/commerce-pro-customer-frontend/coverage
+/libpeerconnection.log
+/commerce-pro-admin-frontend/libpeerconnection.log
+/commerce-pro-customer-frontend/libpeerconnection.log
+testem.log
+/commerce-pro-admin-frontend/testem.log
+/commerce-pro-customer-frontend/testem.log
+/typings
+/commerce-pro-admin-frontend/typings
+/commerce-pro-customer-frontend/typings
+__screenshots__/
+/commerce-pro-admin-frontend/__screenshots__/
+/commerce-pro-customer-frontend/__screenshots__/
+
+# System files
+.DS_Store
+Thumbs.db

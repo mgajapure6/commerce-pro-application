@@ -1,0 +1,314 @@
+[
+  {
+    "id": "inv_001",
+    "productId": "prod_001",
+    "warehouseId": "wh_001",
+    "sku": "WBHP-001",
+    "stockLevel": {
+      "available": 450,
+      "reserved": 75,
+      "onHand": 525,
+      "onOrder": 200,
+      "inTransit": 100
+    },
+    "binLocation": {
+      "zone": "A1",
+      "aisle": "A1-01",
+      "rack": "A1-01-R1",
+      "bin": "bin_nyc_001"
+    },
+    "reorderPoint": 150,
+    "maxStockLevel": 800,
+    "status": "active",
+    "lastReceived": "2026-02-15T10:30:00Z",
+    "lastShipped": "2026-02-26T14:20:00Z",
+    "createdAt": "2024-01-10T08:00:00Z",
+    "updatedAt": "2026-02-26T14:20:00Z",
+    "adjustments": [
+      {
+        "id": "adj_001",
+        "type": "receiving",
+        "quantity": 200,
+        "date": "2026-02-15T10:30:00Z",
+        "reason": "Regular stock receipt"
+      }
+    ],
+    "movements": [
+      {
+        "id": "mov_001",
+        "type": "outbound",
+        "quantity": 50,
+        "date": "2026-02-26T14:20:00Z",
+        "reference": "SO-2026-0215"
+      }
+    ]
+  },
+  {
+    "id": "inv_002",
+    "productId": "prod_002",
+    "warehouseId": "wh_001",
+    "sku": "SWS5-001",
+    "stockLevel": {
+      "available": 85,
+      "reserved": 15,
+      "onHand": 100,
+      "onOrder": 50,
+      "inTransit": 25
+    },
+    "binLocation": {
+      "zone": "A1",
+      "aisle": "A1-01",
+      "rack": "A1-01-R2",
+      "bin": "bin_nyc_004"
+    },
+    "reorderPoint": 50,
+    "maxStockLevel": 150,
+    "status": "active",
+    "lastReceived": "2026-02-10T09:15:00Z",
+    "lastShipped": "2026-02-25T16:45:00Z",
+    "createdAt": "2024-01-15T09:00:00Z",
+    "updatedAt": "2026-02-25T16:45:00Z",
+    "adjustments": [],
+    "movements": [
+      {
+        "id": "mov_002",
+        "type": "outbound",
+        "quantity": 20,
+        "date": "2026-02-25T16:45:00Z",
+        "reference": "SO-2026-0218"
+      }
+    ]
+  },
+  {
+    "id": "inv_003",
+    "productId": "prod_003",
+    "warehouseId": "wh_001",
+    "sku": "OCTS-001",
+    "stockLevel": {
+      "available": 1200,
+      "reserved": 200,
+      "onHand": 1400,
+      "onOrder": 500,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "B1",
+      "aisle": "B1-01",
+      "rack": "B1-01-R1",
+      "bin": "bin_nyc_008"
+    },
+    "reorderPoint": 400,
+    "maxStockLevel": 2000,
+    "status": "active",
+    "lastReceived": "2026-02-20T11:00:00Z",
+    "lastShipped": "2026-02-27T10:30:00Z",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "updatedAt": "2026-02-27T10:30:00Z",
+    "adjustments": [],
+    "movements": []
+  },
+  {
+    "id": "inv_004",
+    "productId": "prod_004",
+    "warehouseId": "wh_002",
+    "sku": "RSP-001",
+    "stockLevel": {
+      "available": 180,
+      "reserved": 30,
+      "onHand": 210,
+      "onOrder": 100,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "W1",
+      "aisle": "W1-01",
+      "rack": "W1-01-R1",
+      "bin": "bin_la_001"
+    },
+    "reorderPoint": 80,
+    "maxStockLevel": 300,
+    "status": "active",
+    "lastReceived": "2026-02-18T08:30:00Z",
+    "lastShipped": "2026-02-26T13:00:00Z",
+    "createdAt": "2024-03-15T11:00:00Z",
+    "updatedAt": "2026-02-26T13:00:00Z",
+    "adjustments": [],
+    "movements": []
+  },
+  {
+    "id": "inv_005",
+    "productId": "prod_005",
+    "warehouseId": "wh_002",
+    "sku": "LLB-001",
+    "stockLevel": {
+      "available": 45,
+      "reserved": 5,
+      "onHand": 50,
+      "onOrder": 30,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "W2",
+      "aisle": "W2-01",
+      "rack": "W2-01-R1",
+      "bin": "bin_la_008"
+    },
+    "reorderPoint": 25,
+    "maxStockLevel": 80,
+    "status": "active",
+    "lastReceived": "2026-02-12T14:00:00Z",
+    "lastShipped": "2026-02-24T09:45:00Z",
+    "createdAt": "2024-04-01T09:00:00Z",
+    "updatedAt": "2026-02-24T09:45:00Z",
+    "adjustments": [
+      {
+        "id": "adj_002",
+        "type": "damage",
+        "quantity": -2,
+        "date": "2026-02-20T10:00:00Z",
+        "reason": "Damaged during handling"
+      }
+    ],
+    "movements": []
+  },
+  {
+    "id": "inv_006",
+    "productId": "prod_006",
+    "warehouseId": "wh_003",
+    "sku": "MKRGB-001",
+    "stockLevel": {
+      "available": 95,
+      "reserved": 10,
+      "onHand": 105,
+      "onOrder": 50,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "S1",
+      "aisle": "S1-01",
+      "rack": "S1-01-R1",
+      "bin": "bin_dal_001"
+    },
+    "reorderPoint": 40,
+    "maxStockLevel": 150,
+    "status": "active",
+    "lastReceived": "2026-02-16T11:30:00Z",
+    "lastShipped": "2026-02-25T15:20:00Z",
+    "createdAt": "2024-05-01T10:00:00Z",
+    "updatedAt": "2026-02-25T15:20:00Z",
+    "adjustments": [],
+    "movements": []
+  },
+  {
+    "id": "inv_007",
+    "productId": "prod_007",
+    "warehouseId": "wh_004",
+    "sku": "YMP-001",
+    "stockLevel": {
+      "available": 320,
+      "reserved": 50,
+      "onHand": 370,
+      "onOrder": 150,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "M1",
+      "aisle": "M1-01",
+      "rack": "M1-01-R1",
+      "bin": "bin_chi_001"
+    },
+    "reorderPoint": 120,
+    "maxStockLevel": 500,
+    "status": "active",
+    "lastReceived": "2026-02-14T09:00:00Z",
+    "lastShipped": "2026-02-26T11:15:00Z",
+    "createdAt": "2024-06-01T08:00:00Z",
+    "updatedAt": "2026-02-26T11:15:00Z",
+    "adjustments": [],
+    "movements": []
+  },
+  {
+    "id": "inv_008",
+    "productId": "prod_008",
+    "warehouseId": "wh_004",
+    "sku": "SSWB-001",
+    "stockLevel": {
+      "available": 580,
+      "reserved": 100,
+      "onHand": 680,
+      "onOrder": 300,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "M1",
+      "aisle": "M1-01",
+      "rack": "M1-01-R2",
+      "bin": "bin_chi_003"
+    },
+    "reorderPoint": 200,
+    "maxStockLevel": 1000,
+    "status": "active",
+    "lastReceived": "2026-02-19T10:45:00Z",
+    "lastShipped": "2026-02-27T08:30:00Z",
+    "createdAt": "2024-07-01T09:00:00Z",
+    "updatedAt": "2026-02-27T08:30:00Z",
+    "adjustments": [],
+    "movements": []
+  },
+  {
+    "id": "inv_009",
+    "productId": "prod_001",
+    "warehouseId": "wh_002",
+    "sku": "WBHP-001",
+    "stockLevel": {
+      "available": 250,
+      "reserved": 40,
+      "onHand": 290,
+      "onOrder": 100,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "W1",
+      "aisle": "W1-01",
+      "rack": "W1-01-R2",
+      "bin": "bin_la_004"
+    },
+    "reorderPoint": 100,
+    "maxStockLevel": 400,
+    "status": "active",
+    "lastReceived": "2026-02-17T13:00:00Z",
+    "lastShipped": "2026-02-26T16:00:00Z",
+    "createdAt": "2024-08-01T10:00:00Z",
+    "updatedAt": "2026-02-26T16:00:00Z",
+    "adjustments": [],
+    "movements": []
+  },
+  {
+    "id": "inv_010",
+    "productId": "prod_002",
+    "warehouseId": "wh_003",
+    "sku": "SWS5-001",
+    "stockLevel": {
+      "available": 35,
+      "reserved": 8,
+      "onHand": 43,
+      "onOrder": 25,
+      "inTransit": 0
+    },
+    "binLocation": {
+      "zone": "S1",
+      "aisle": "S1-02",
+      "rack": "S1-02-R1",
+      "bin": "bin_dal_004"
+    },
+    "reorderPoint": 30,
+    "maxStockLevel": 80,
+    "status": "active",
+    "lastReceived": "2026-02-13T10:00:00Z",
+    "lastShipped": "2026-02-24T14:30:00Z",
+    "createdAt": "2024-09-01T09:00:00Z",
+    "updatedAt": "2026-02-24T14:30:00Z",
+    "adjustments": [],
+    "movements": []
+  }
+]

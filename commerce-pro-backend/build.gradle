@@ -1,0 +1,142 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.11'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.commerce-pro-backend'
+version = '0.0.1-SNAPSHOT'
+description = 'E-commerce backend for Commerce Pro'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// =============================================
+	// Spring Boot Starters
+	// =============================================
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	
+	// =============================================
+	// API Documentation (OpenAPI/Swagger)
+	// =============================================
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+	
+	// =============================================
+	// Lombok (Code Generation)
+	// =============================================
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	// =============================================
+	// MapStruct (DTO Mapping) - Alternative to manual mappers
+	// =============================================
+	implementation 'org.mapstruct:mapstruct:1.6.3'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+	// Lombok + MapStruct binding
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	
+	// =============================================
+	// Apache Commons (Utilities)
+	// =============================================
+	// Commons Lang - String and object utilities
+	implementation 'org.apache.commons:commons-lang3:3.17.0'
+	// Commons IO - File and stream utilities
+	implementation 'commons-io:commons-io:2.18.0'
+	// Commons Collections - Collection utilities
+	implementation 'org.apache.commons:commons-collections4:4.4'
+	
+	// =============================================
+	// JSON Processing
+	// =============================================
+	// Gson - Alternative JSON parser (optional, Spring has Jackson built-in)
+	implementation 'com.google.code.gson:gson:2.12.1'
+	
+	// =============================================
+	// Database
+	// =============================================
+	// H2 Database (Development)
+	runtimeOnly 'com.h2database:h2'
+	// MySQL Connector (Production) - Uncomment when needed
+	// runtimeOnly 'com.mysql:mysql-connector-j:9.2.0'
+	// PostgreSQL (Production) - Uncomment when needed
+	// runtimeOnly 'org.postgresql:postgresql:42.7.5'
+	
+	// =============================================
+	// Caching (Optional - for performance)
+	// =============================================
+	// implementation 'org.springframework.boot:spring-boot-starter-cache'
+	// implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+	
+	// =============================================
+	// Security (Optional - Uncomment when adding auth)
+	// =============================================
+	// implementation 'org.springframework.boot:spring-boot-starter-security'
+	// implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	// runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	// runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+	
+	// =============================================
+	// Mail (Optional - for order notifications)
+	// =============================================
+	// implementation 'org.springframework.boot:spring-boot-starter-mail'
+	
+	// =============================================
+	// Development Tools
+	// =============================================
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	
+	// =============================================
+	// Testing
+	// =============================================
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// =============================================
+// Development Profile
+// =============================================
+tasks.named('bootRun') {
+	jvmArgs = ['-Dspring.profiles.active=dev']
+}
+
+// =============================================
+// Java Compiler Options
+// =============================================
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+	options.compilerArgs = [
+		'-Amapstruct.suppressGeneratorTimestamp=true',
+		'-Amapstruct.defaultComponentModel=spring',
+		'-Amapstruct.unmappedTargetPolicy=IGNORE'
+	]
+}
+
+// =============================================
+// Gradle Wrapper Task
+// =============================================
+tasks.wrapper {
+	gradleVersion = '8.14.4'
+}

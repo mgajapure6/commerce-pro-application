@@ -1,0 +1,348 @@
+[
+  {
+    "id": "prod_001",
+    "name": "Wireless Bluetooth Headphones Pro",
+    "sku": "WBHP-001",
+    "variant": {
+      "color": "Midnight Black",
+      "size": "One Size"
+    },
+    "image": "https://example.com/images/wbhp-001-black.jpg",
+    "category": "Electronics",
+    "subcategory": "Audio",
+    "brand": "TechSound",
+    "unitCost": 45.99,
+    "unitOfMeasure": "piece",
+    "weight": {
+      "value": 250,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 20,
+      "width": 18,
+      "height": 8,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_001",
+        "name": "TechCorp Industries",
+        "cost": 45.99,
+        "leadTime": 14,
+        "minOrderQty": 50
+      },
+      {
+        "id": "sup_003",
+        "name": "Premium Parts Ltd",
+        "cost": 48.50,
+        "leadTime": 10,
+        "minOrderQty": 100
+      }
+    ],
+    "preferredSupplier": "sup_001",
+    "isHazmat": false,
+    "isFragile": false,
+    "requiresColdStorage": false
+  },
+  {
+    "id": "prod_002",
+    "name": "Smart Watch Series 5",
+    "sku": "SWS5-001",
+    "variant": {
+      "color": "Space Gray",
+      "size": "44mm"
+    },
+    "image": "https://example.com/images/sws5-001-gray.jpg",
+    "category": "Electronics",
+    "subcategory": "Wearables",
+    "brand": "TechGear",
+    "unitCost": 189.99,
+    "unitOfMeasure": "piece",
+    "weight": {
+      "value": 45,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 4.4,
+      "width": 3.8,
+      "height": 1.0,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_001",
+        "name": "TechCorp Industries",
+        "cost": 189.99,
+        "leadTime": 21,
+        "minOrderQty": 25
+      },
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 195.00,
+        "leadTime": 18,
+        "minOrderQty": 30
+      }
+    ],
+    "preferredSupplier": "sup_001",
+    "isHazmat": false,
+    "isFragile": true,
+    "requiresColdStorage": false
+  },
+  {
+    "id": "prod_003",
+    "name": "Organic Cotton T-Shirt",
+    "sku": "OCTS-001",
+    "variant": {
+      "color": "Natural White",
+      "size": "Medium"
+    },
+    "image": "https://example.com/images/octs-001-white.jpg",
+    "category": "Apparel",
+    "subcategory": "Tops",
+    "brand": "EcoWear",
+    "unitCost": 12.50,
+    "unitOfMeasure": "piece",
+    "weight": {
+      "value": 180,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 30,
+      "width": 25,
+      "height": 3,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 12.50,
+        "leadTime": 30,
+        "minOrderQty": 200
+      },
+      {
+        "id": "sup_004",
+        "name": "Budget Wholesale",
+        "cost": 10.75,
+        "leadTime": 45,
+        "minOrderQty": 500
+      }
+    ],
+    "preferredSupplier": "sup_002",
+    "isHazmat": false,
+    "isFragile": false,
+    "requiresColdStorage": false
+  },
+  {
+    "id": "prod_004",
+    "name": "Running Shoes Pro",
+    "sku": "RSP-001",
+    "variant": {
+      "color": "Electric Blue",
+      "size": "US 10"
+    },
+    "image": "https://example.com/images/rsp-001-blue.jpg",
+    "category": "Footwear",
+    "subcategory": "Athletic",
+    "brand": "SportMax",
+    "unitCost": 65.00,
+    "unitOfMeasure": "pair",
+    "weight": {
+      "value": 700,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 35,
+      "width": 20,
+      "height": 12,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 65.00,
+        "leadTime": 28,
+        "minOrderQty": 50
+      }
+    ],
+    "preferredSupplier": "sup_002",
+    "isHazmat": false,
+    "isFragile": false,
+    "requiresColdStorage": false
+  },
+  {
+    "id": "prod_005",
+    "name": "Leather Laptop Bag",
+    "sku": "LLB-001",
+    "variant": {
+      "color": "Brown",
+      "size": "15 inch"
+    },
+    "image": "https://example.com/images/llb-001-brown.jpg",
+    "category": "Accessories",
+    "subcategory": "Bags",
+    "brand": "LeatherCraft",
+    "unitCost": 85.00,
+    "unitOfMeasure": "piece",
+    "weight": {
+      "value": 1200,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 40,
+      "width": 30,
+      "height": 8,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_003",
+        "name": "Premium Parts Ltd",
+        "cost": 85.00,
+        "leadTime": 21,
+        "minOrderQty": 20
+      },
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 78.50,
+        "leadTime": 35,
+        "minOrderQty": 40
+      }
+    ],
+    "preferredSupplier": "sup_003",
+    "isHazmat": false,
+    "isFragile": false,
+    "requiresColdStorage": false
+  },
+  {
+    "id": "prod_006",
+    "name": "Mechanical Keyboard RGB",
+    "sku": "MKRGB-001",
+    "variant": {
+      "color": "Black",
+      "size": "Full Size"
+    },
+    "image": "https://example.com/images/mkrgb-001-black.jpg",
+    "category": "Electronics",
+    "subcategory": "Computer Accessories",
+    "brand": "KeyMaster",
+    "unitCost": 89.99,
+    "unitOfMeasure": "piece",
+    "weight": {
+      "value": 1100,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 44,
+      "width": 14,
+      "height": 4,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_001",
+        "name": "TechCorp Industries",
+        "cost": 89.99,
+        "leadTime": 14,
+        "minOrderQty": 30
+      }
+    ],
+    "preferredSupplier": "sup_001",
+    "isHazmat": false,
+    "isFragile": true,
+    "requiresColdStorage": false
+  },
+  {
+    "id": "prod_007",
+    "name": "Yoga Mat Premium",
+    "sku": "YMP-001",
+    "variant": {
+      "color": "Purple",
+      "size": "6mm"
+    },
+    "image": "https://example.com/images/ymp-001-purple.jpg",
+    "category": "Sports & Fitness",
+    "subcategory": "Yoga",
+    "brand": "ZenFit",
+    "unitCost": 32.00,
+    "unitOfMeasure": "piece",
+    "weight": {
+      "value": 1100,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 183,
+      "width": 61,
+      "height": 0.6,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_004",
+        "name": "Budget Wholesale",
+        "cost": 28.00,
+        "leadTime": 30,
+        "minOrderQty": 100
+      },
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 32.00,
+        "leadTime": 21,
+        "minOrderQty": 75
+      }
+    ],
+    "preferredSupplier": "sup_004",
+    "isHazmat": false,
+    "isFragile": false,
+    "requiresColdStorage": false
+  },
+  {
+    "id": "prod_008",
+    "name": "Stainless Steel Water Bottle",
+    "sku": "SSWB-001",
+    "variant": {
+      "color": "Silver",
+      "size": "32oz"
+    },
+    "image": "https://example.com/images/sswb-001-silver.jpg",
+    "category": "Home & Kitchen",
+    "subcategory": "Drinkware",
+    "brand": "HydroLife",
+    "unitCost": 18.50,
+    "unitOfMeasure": "piece",
+    "weight": {
+      "value": 400,
+      "unit": "g"
+    },
+    "dimensions": {
+      "length": 9,
+      "width": 9,
+      "height": 26,
+      "unit": "cm"
+    },
+    "suppliers": [
+      {
+        "id": "sup_004",
+        "name": "Budget Wholesale",
+        "cost": 15.25,
+        "leadTime": 25,
+        "minOrderQty": 150
+      },
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 18.50,
+        "leadTime": 18,
+        "minOrderQty": 100
+      }
+    ],
+    "preferredSupplier": "sup_004",
+    "isHazmat": false,
+    "isFragile": false,
+    "requiresColdStorage": false
+  }
+]

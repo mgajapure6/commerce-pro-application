@@ -1,0 +1,183 @@
+[
+  {
+    "id": "lsa_001",
+    "severity": "critical",
+    "productId": "prod_002",
+    "productName": "Smart Watch Series 5",
+    "sku": "SWS5-001",
+    "warehouseId": "wh_003",
+    "warehouseName": "South Distribution",
+    "currentStock": 43,
+    "reorderPoint": 30,
+    "maxStock": 80,
+    "availableStock": 35,
+    "reservedStock": 8,
+    "alertThreshold": 15,
+    "daysOfSupply": 5,
+    "suggestedSuppliers": [
+      {
+        "id": "sup_001",
+        "name": "TechCorp Industries",
+        "cost": 189.99,
+        "leadTime": 21,
+        "suggestedOrderQty": 50,
+        "totalCost": 9499.50
+      },
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 195.00,
+        "leadTime": 18,
+        "suggestedOrderQty": 50,
+        "totalCost": 9750.00
+      }
+    ],
+    "lastOrdered": "2026-02-10T10:00:00Z",
+    "lastReceipt": "2026-02-13T10:00:00Z",
+    "avgDailyUsage": 7,
+    "projectedStockoutDate": "2026-03-06",
+    "createdAt": "2026-02-27T06:00:00Z",
+    "acknowledgedAt": null,
+    "acknowledgedBy": null
+  },
+  {
+    "id": "lsa_002",
+    "severity": "critical",
+    "productId": "prod_005",
+    "productName": "Leather Laptop Bag",
+    "sku": "LLB-001",
+    "warehouseId": "wh_002",
+    "warehouseName": "West Coast Hub",
+    "currentStock": 50,
+    "reorderPoint": 25,
+    "maxStock": 80,
+    "availableStock": 45,
+    "reservedStock": 5,
+    "alertThreshold": 12,
+    "daysOfSupply": 8,
+    "suggestedSuppliers": [
+      {
+        "id": "sup_003",
+        "name": "Premium Parts Ltd",
+        "cost": 85.00,
+        "leadTime": 21,
+        "suggestedOrderQty": 30,
+        "totalCost": 2550.00
+      }
+    ],
+    "lastOrdered": "2026-02-08T09:00:00Z",
+    "lastReceipt": "2026-02-12T14:00:00Z",
+    "avgDailyUsage": 5,
+    "projectedStockoutDate": "2026-03-07",
+    "createdAt": "2026-02-27T06:00:00Z",
+    "acknowledgedAt": null,
+    "acknowledgedBy": null
+  },
+  {
+    "id": "lsa_003",
+    "severity": "warning",
+    "productId": "prod_002",
+    "productName": "Smart Watch Series 5",
+    "sku": "SWS5-001",
+    "warehouseId": "wh_001",
+    "warehouseName": "Main Distribution Center",
+    "currentStock": 100,
+    "reorderPoint": 50,
+    "maxStock": 150,
+    "availableStock": 85,
+    "reservedStock": 15,
+    "alertThreshold": 25,
+    "daysOfSupply": 12,
+    "suggestedSuppliers": [
+      {
+        "id": "sup_001",
+        "name": "TechCorp Industries",
+        "cost": 189.99,
+        "leadTime": 21,
+        "suggestedOrderQty": 50,
+        "totalCost": 9499.50
+      }
+    ],
+    "lastOrdered": "2026-02-05T11:00:00Z",
+    "lastReceipt": "2026-02-10T09:15:00Z",
+    "avgDailyUsage": 7,
+    "projectedStockoutDate": "2026-03-11",
+    "createdAt": "2026-02-26T06:00:00Z",
+    "acknowledgedAt": "2026-02-26T09:30:00Z",
+    "acknowledgedBy": "emp_101"
+  },
+  {
+    "id": "lsa_004",
+    "severity": "warning",
+    "productId": "prod_006",
+    "productName": "Mechanical Keyboard RGB",
+    "sku": "MKRGB-001",
+    "warehouseId": "wh_003",
+    "warehouseName": "South Distribution",
+    "currentStock": 105,
+    "reorderPoint": 40,
+    "maxStock": 150,
+    "availableStock": 95,
+    "reservedStock": 10,
+    "alertThreshold": 20,
+    "daysOfSupply": 15,
+    "suggestedSuppliers": [
+      {
+        "id": "sup_001",
+        "name": "TechCorp Industries",
+        "cost": 89.99,
+        "leadTime": 14,
+        "suggestedOrderQty": 45,
+        "totalCost": 4049.55
+      }
+    ],
+    "lastOrdered": "2026-02-01T10:00:00Z",
+    "lastReceipt": "2026-02-16T11:30:00Z",
+    "avgDailyUsage": 6,
+    "projectedStockoutDate": "2026-03-13",
+    "createdAt": "2026-02-25T06:00:00Z",
+    "acknowledgedAt": "2026-02-25T14:00:00Z",
+    "acknowledgedBy": "emp_103"
+  },
+  {
+    "id": "lsa_005",
+    "severity": "warning",
+    "productId": "prod_007",
+    "productName": "Yoga Mat Premium",
+    "sku": "YMP-001",
+    "warehouseId": "wh_004",
+    "warehouseName": "Chicago Facility",
+    "currentStock": 370,
+    "reorderPoint": 120,
+    "maxStock": 500,
+    "availableStock": 320,
+    "reservedStock": 50,
+    "alertThreshold": 50,
+    "daysOfSupply": 14,
+    "suggestedSuppliers": [
+      {
+        "id": "sup_004",
+        "name": "Budget Wholesale",
+        "cost": 28.00,
+        "leadTime": 30,
+        "suggestedOrderQty": 130,
+        "totalCost": 3640.00
+      },
+      {
+        "id": "sup_002",
+        "name": "Global Supply Co",
+        "cost": 32.00,
+        "leadTime": 21,
+        "suggestedOrderQty": 130,
+        "totalCost": 4160.00
+      }
+    ],
+    "lastOrdered": "2026-02-04T09:00:00Z",
+    "lastReceipt": "2026-02-14T09:00:00Z",
+    "avgDailyUsage": 23,
+    "projectedStockoutDate": "2026-03-10",
+    "createdAt": "2026-02-24T06:00:00Z",
+    "acknowledgedAt": null,
+    "acknowledgedBy": null
+  }
+]

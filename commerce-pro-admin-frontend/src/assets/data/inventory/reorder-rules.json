@@ -1,0 +1,77 @@
+[
+  {
+    "id": "rr_001",
+    "name": "Electronics High Velocity",
+    "description": "Reorder rule for fast-moving electronic products",
+    "productIds": ["prod_001", "prod_002", "prod_006"],
+    "category": "Electronics",
+    "warehouseIds": ["wh_001", "wh_002", "wh_003"],
+    "conditions": {
+      "minStockLevel": 50,
+      "maxStockLevel": 300,
+      "reorderPoint": 75,
+      "safetyStock": 25,
+      "leadTimeDays": 14,
+      "orderQuantity": 150,
+      "orderMultiple": 25
+    },
+    "supplierPreference": "preferred",
+    "autoGeneratePO": false,
+    "approvalRequired": true,
+    "priority": "high",
+    "status": "active",
+    "createdBy": "emp_101",
+    "createdAt": "2025-01-15T10:00:00Z",
+    "updatedAt": "2026-02-01T11:00:00Z"
+  },
+  {
+    "id": "rr_002",
+    "name": "Apparel Standard",
+    "description": "Reorder rule for apparel items with seasonal adjustments",
+    "productIds": ["prod_003"],
+    "category": "Apparel",
+    "warehouseIds": ["wh_001", "wh_004"],
+    "conditions": {
+      "minStockLevel": 200,
+      "maxStockLevel": 2000,
+      "reorderPoint": 400,
+      "safetyStock": 100,
+      "leadTimeDays": 30,
+      "orderQuantity": 600,
+      "orderMultiple": 50
+    },
+    "supplierPreference": "lowest_cost",
+    "autoGeneratePO": true,
+    "approvalRequired": false,
+    "priority": "medium",
+    "status": "active",
+    "createdBy": "emp_102",
+    "createdAt": "2025-03-20T09:00:00Z",
+    "updatedAt": "2026-01-15T10:30:00Z"
+  },
+  {
+    "id": "rr_003",
+    "name": "Sports Equipment",
+    "description": "Reorder rule for sports and fitness equipment",
+    "productIds": ["prod_004", "prod_007"],
+    "category": "Sports & Fitness",
+    "warehouseIds": ["wh_002", "wh_004"],
+    "conditions": {
+      "minStockLevel": 80,
+      "maxStockLevel": 500,
+      "reorderPoint": 120,
+      "safetyStock": 40,
+      "leadTimeDays": 21,
+      "orderQuantity": 200,
+      "orderMultiple": 20
+    },
+    "supplierPreference": "fastest_delivery",
+    "autoGeneratePO": false,
+    "approvalRequired": true,
+    "priority": "medium",
+    "status": "active",
+    "createdBy": "emp_103",
+    "createdAt": "2025-06-10T11:00:00Z",
+    "updatedAt": "2026-02-10T14:00:00Z"
+  }
+]
