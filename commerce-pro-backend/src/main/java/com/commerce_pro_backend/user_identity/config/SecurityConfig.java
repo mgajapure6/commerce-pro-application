@@ -67,8 +67,7 @@ public class SecurityConfig {
 
                         // Identity management
                         .requestMatchers(HttpMethod.POST, "/api/v1/identity/users").hasAuthority("identity:user:create")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/identity/users/**")
-                        .hasAuthority("identity:user:delete")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/identity/users/**").hasAuthority("identity:user:delete")
                         .requestMatchers("/api/v1/identity/roles/**").hasAuthority("identity:role:manage")
                         .requestMatchers("/api/v1/identity/permissions/**").hasAuthority("identity:permission:read")
 
