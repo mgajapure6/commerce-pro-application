@@ -1,0 +1,137 @@
+import { Injectable, computed, signal } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, catchError, map, of, tap } from 'rxjs';
+
+import { ApiResponse } from '../../models/common';
+import { AuthRequest, AuthResponse, AuthSession } from '../../models/auth';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private readonly apiBase = 'http://localhost:8080/api';
+  private readonly authBase = `${this.apiBase}/api/v1/auth`;
+  private readonly storageKey = 'commerce-pro-admin-auth';
+
+  private readonly sessionSignal = signal<AuthSession | null>(this.readPersistedSession());
+
+  readonly session = computed(() => this.sessionSignal());
+  readonly isAuthenticated = computed(() => {
+    const current = this.sessionSignal();
+    if (!current?.accessToken) return false;
+    if (!current.expiresAtMs) return true;
+    return Date.now() < current.expiresAtMs;
+  });
+
+  constructor(private http: HttpClient) {}
+
+  login(payload: AuthRequest): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<AuthResponse>>(`${this.authBase}/login`, payload)
+      .pipe(
+        map(response => response.data),
+        tap(response => this.setSession(response)),
+        map(() => true),
+        catchError(() => of(false))
+      );
+  }
+
+  refreshToken(): Observable<boolean> {
+    const refreshToken = this.sessionSignal()?.refreshToken;
+    if (!refreshToken) return of(false);
+
+    return this.http
+      .post<ApiResponse<AuthResponse>>(`${this.authBase}/refresh`, { refreshToken })
+      .pipe(
+        map(response => response.data),
+        tap(response => this.setSession(response)),
+        map(() => true),
+        catchError(() => {
+          this.clearSession();
+          return of(false);
+        })
+      );
+  }
+
+  logout(): Observable<boolean> {
+    const token = this.sessionSignal()?.accessToken;
+    if (!token) {
+      this.clearSession();
+      return of(true);
+    }
+
+    return this.http
+      .post<ApiResponse<string>>(`${this.authBase}/logout`, {}, {
+        headers: new HttpHeaders({ Authorization: `Bearer ${token}` })
+      })
+      .pipe(
+        map(() => true),
+        catchError(() => of(false)),
+        tap(() => this.clearSession())
+      );
+  }
+
+  hasAuthority(authority: string): boolean {
+    return this.sessionSignal()?.authorities?.includes(authority) ?? false;
+  }
+
+  hasAnyAuthority(authorities: string[]): boolean {
+    if (!authorities.length) return true;
+    return authorities.some(authority => this.hasAuthority(authority));
+  }
+
+  getAccessToken(): string | null {
+    return this.sessionSignal()?.accessToken ?? null;
+  }
+
+  getCurrentUserId(): string | null {
+    return this.sessionSignal()?.userId ?? null;
+  }
+
+  private setSession(response: AuthResponse): void {
+    const tokenClaims = this.decodeJwtPayload(response.accessToken);
+    const authorities = Array.isArray(tokenClaims?.['roles'])
+      ? (tokenClaims?.['roles'] as unknown[]).filter((value: unknown): value is string => typeof value === 'string')
+      : [];
+
+    const expiryMs = typeof tokenClaims?.['exp'] === 'number' ? Number(tokenClaims['exp']) * 1000 : undefined;
+
+    const session: AuthSession = {
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      userId: response.userId,
+      username: response.username,
+      superAdmin: response.superAdmin,
+      authorities,
+      expiresAtMs: expiryMs
+    };
+
+    this.sessionSignal.set(session);
+    localStorage.setItem(this.storageKey, JSON.stringify(session));
+  }
+
+  private clearSession(): void {
+    this.sessionSignal.set(null);
+    localStorage.removeItem(this.storageKey);
+  }
+
+  private readPersistedSession(): AuthSession | null {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      if (!raw) return null;
+      return JSON.parse(raw) as AuthSession;
+    } catch {
+      return null;
+    }
+  }
+
+  private decodeJwtPayload(token: string): Record<string, unknown> | null {
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) return null;
+      return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+    } catch {
+      return null;
+    }
+  }
+}

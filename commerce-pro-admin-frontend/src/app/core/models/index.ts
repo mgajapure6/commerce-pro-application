@@ -41,6 +41,9 @@ export * from './inventory';
 // Identity models
 export * from './identity';
 
+// Auth models
+export * from './auth';
+
 // Legacy exports for backward compatibility
 export type { Product as ProductModel } from './catalog/product.model';
 export type { Category as CategoryModel } from './catalog/category.model';

@@ -15,18 +15,23 @@ import {
   SuperAdminConfigView,
   UpdateIdentityUserRequest
 } from '../../models/identity';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IdentityService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   private readonly baseUrl = 'http://localhost:8080/api/api/v1/identity';
-  private readonly adminId = 'ui-admin';
 
   private adminHeaders(): HttpHeaders {
-    return new HttpHeaders({ 'X-Admin-Id': this.adminId });
+    const userId = this.authService.getCurrentUserId() ?? 'ui-admin';
+    return new HttpHeaders({
+      'X-Admin-Id': userId,
+      'X-User-Id': userId
+    });
   }
 
   getUsers(page = 0, size = 10, search = ''): Observable<PageResponse<IdentityUser>> {
