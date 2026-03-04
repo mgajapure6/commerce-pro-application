@@ -8,7 +8,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * CORS configuration for Angular frontend integration.
@@ -28,7 +27,7 @@ public class CorsConfig {
                 .stream()
                 .map(String::trim)
                 .filter(origin -> !origin.isBlank())
-                .collect(Collectors.toList());
+                .toList();
 
         // Allow Angular dev server and production origins
         config.setAllowedOrigins(origins);
