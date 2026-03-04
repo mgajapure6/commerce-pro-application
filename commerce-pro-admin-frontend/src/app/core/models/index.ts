@@ -38,6 +38,9 @@ export * from './dashboard.model';
 // Inventory models
 export * from './inventory';
 
+// Identity models
+export * from './identity';
+
 // Legacy exports for backward compatibility
 export type { Product as ProductModel } from './catalog/product.model';
 export type { Category as CategoryModel } from './catalog/category.model';
