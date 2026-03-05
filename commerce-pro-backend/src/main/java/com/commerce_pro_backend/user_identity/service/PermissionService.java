@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.config.PermissionRegistry;
 import com.commerce_pro_backend.user_identity.dto.CreatePermissionRequest;
 import com.commerce_pro_backend.user_identity.dto.PermissionDTO;
@@ -39,7 +40,7 @@ public class PermissionService {
     @Transactional
     public PermissionDTO createPermission(CreatePermissionRequest request, String adminId) {
         if (permissionRepository.existsById(request.getCode())) {
-            throw new RuntimeException("Permission code already exists");
+            throw ApiException.conflict("Permission code already exists");
         }
 
         Permission permission = Permission.builder()
@@ -65,10 +66,10 @@ public class PermissionService {
     @Transactional
     public PermissionDTO updatePermission(String code, UpdatePermissionRequest request, String adminId) {
         Permission permission = permissionRepository.findById(code)
-            .orElseThrow(() -> new RuntimeException("Permission not found"));
+            .orElseThrow(() -> ApiException.notFound("Permission", code));
 
         if (permission.getIsSystem()) {
-            throw new RuntimeException("Cannot modify system permission");
+            throw ApiException.forbidden("Cannot modify system permission");
         }
 
         if (request.getName() != null) permission.setName(request.getName());
@@ -91,15 +92,15 @@ public class PermissionService {
     @Transactional
     public void deletePermission(String code, String adminId) {
         Permission permission = permissionRepository.findById(code)
-            .orElseThrow(() -> new RuntimeException("Permission not found"));
+            .orElseThrow(() -> ApiException.notFound("Permission", code));
 
         if (permission.getIsSystem()) {
-            throw new RuntimeException("Cannot delete system permission");
+            throw ApiException.forbidden("Cannot delete system permission");
         }
 
         long roleCount = permissionRepository.countRolesUsingPermission(code);
         if (roleCount > 0) {
-            throw new RuntimeException("Permission is used by " + roleCount + " roles");
+            throw ApiException.conflict("Permission is used by " + roleCount + " roles");
         }
 
         permissionRepository.delete(permission);

@@ -7,13 +7,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.dto.AuthRequest;
 import com.commerce_pro_backend.user_identity.dto.AuthResponse;
 import com.commerce_pro_backend.user_identity.dto.ChangePasswordRequest;
+import com.commerce_pro_backend.user_identity.dto.MfaDisableRequest;
+import com.commerce_pro_backend.user_identity.dto.MfaSetupResponse;
 import com.commerce_pro_backend.user_identity.entity.User;
 import com.commerce_pro_backend.user_identity.enums.AuditAction;
 import com.commerce_pro_backend.user_identity.repository.UserRepository;
@@ -30,6 +34,8 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomUserDetailsService userDetailsService;
+    private final TotpService totpService;
     private final AuditService auditService;
     private final SuperAdminSetupService superAdminSetupService;
 
@@ -111,9 +117,11 @@ public class AuthService {
             throw new BadCredentialsException("User is deactivated");
         }
         
-        // Create temporary authentication for token generation
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        // Create authentication with effective authorities for refreshed access token
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-            username, null, java.util.Collections.emptyList()
+            userDetails, null, userDetails.getAuthorities()
         );
         
         boolean isSuperAdmin = superAdminSetupService.isSuperAdmin(username);
@@ -151,7 +159,7 @@ public class AuthService {
     @Transactional
     public void changePassword(String userId, ChangePasswordRequest request) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", userId));
         
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
             throw new BadCredentialsException("Current password is incorrect");
@@ -167,8 +175,74 @@ public class AuthService {
     }
 
     private boolean verifyMfaCode(User user, String code) {
-        // Implement TOTP verification logic here
-        // For now, placeholder
-        return true;
+        return user.getMfaSecret() != null && totpService.verifyCode(user.getMfaSecret(), code);
+    }
+
+    @Transactional
+    public MfaSetupResponse setupMfa(String userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> ApiException.notFound("User", userId));
+
+        String secret = totpService.generateSecret();
+        user.setMfaSecret(secret);
+        user.setMfaEnabled(false);
+        userRepository.save(user);
+
+        String otpAuthUrl = totpService.buildOtpAuthUrl(user.getUsername(), secret);
+
+        auditService.log(userId, AuditAction.MFA_VERIFIED, "USER", userId,
+            user.getUsername(), null, "MFA setup initiated", true);
+
+        return MfaSetupResponse.builder()
+            .secret(secret)
+            .otpauthUrl(otpAuthUrl)
+            .issuer(totpService.getIssuer())
+            .accountName(user.getUsername())
+            .build();
+    }
+
+    @Transactional
+    public void enableMfa(String userId, String code) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> ApiException.notFound("User", userId));
+
+        if (user.getMfaSecret() == null) {
+            throw ApiException.badRequest("MFA setup has not been initialized");
+        }
+
+        if (!totpService.verifyCode(user.getMfaSecret(), code)) {
+            throw ApiException.badRequest("Invalid MFA code");
+        }
+
+        user.setMfaEnabled(true);
+        userRepository.save(user);
+
+        auditService.log(userId, AuditAction.MFA_ENABLED, "USER", userId,
+            user.getUsername(), null, "MFA enabled", true);
+    }
+
+    @Transactional
+    public void disableMfa(String userId, MfaDisableRequest request) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> ApiException.notFound("User", userId));
+
+        if (!Boolean.TRUE.equals(user.getMfaEnabled())) {
+            throw ApiException.badRequest("MFA is not enabled");
+        }
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            throw ApiException.badRequest("Password is incorrect");
+        }
+
+        if (!totpService.verifyCode(user.getMfaSecret(), request.getCode())) {
+            throw ApiException.badRequest("Invalid MFA code");
+        }
+
+        user.setMfaEnabled(false);
+        user.setMfaSecret(null);
+        userRepository.save(user);
+
+        auditService.log(userId, AuditAction.MFA_DISABLED, "USER", userId,
+            user.getUsername(), null, "MFA disabled", true);
     }
 }

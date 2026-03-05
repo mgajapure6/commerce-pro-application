@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.config.RoleHierarchyConfig;
 import com.commerce_pro_backend.user_identity.dto.CreateRoleRequest;
 import com.commerce_pro_backend.user_identity.dto.PermissionDTO;
@@ -44,7 +45,7 @@ public class RoleService {
     @Transactional
     public RoleDTO createRole(CreateRoleRequest request, String adminId) {
         if (roleRepository.existsByCode(request.getCode())) {
-            throw new RuntimeException("Role code already exists");
+            throw ApiException.conflict("Role code already exists");
         }
 
         Role role = Role.builder()
@@ -61,7 +62,7 @@ public class RoleService {
 
         if (request.getParentRoleId() != null) {
             Role parent = roleRepository.findById(request.getParentRoleId())
-                .orElseThrow(() -> new RuntimeException("Parent role not found"));
+                .orElseThrow(() -> ApiException.notFound("Parent role", request.getParentRoleId()));
             role.setParentRole(parent);
         }
 
@@ -87,17 +88,17 @@ public class RoleService {
     @Transactional(readOnly = true)
     public RoleDetailDTO getRoleDetail(String id) {
         Role role = roleRepository.findWithDetailsById(id)
-            .orElseThrow(() -> new RuntimeException("Role not found"));
+            .orElseThrow(() -> ApiException.notFound("Role", id));
         return mapToDetailDTO(role);
     }
 
     @Transactional
     public RoleDTO updateRole(String id, UpdateRoleRequest request, String adminId) {
         Role role = roleRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Role not found"));
+            .orElseThrow(() -> ApiException.notFound("Role", id));
 
         if (role.getIsSystem() && !hierarchyConfig.getHierarchyRules().getImmutableSystemRoles().contains(role.getCode())) {
-            throw new RuntimeException("Cannot modify system role");
+            throw ApiException.forbidden("Cannot modify system role");
         }
 
         String oldValue = String.format("name=%s, mfa=%s, timeout=%s",
@@ -127,15 +128,15 @@ public class RoleService {
     @Transactional
     public void deleteRole(String id, String adminId, boolean force) {
         Role role = roleRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Role not found"));
+            .orElseThrow(() -> ApiException.notFound("Role", id));
 
         if (role.getIsSystem()) {
-            throw new RuntimeException("Cannot delete system role");
+            throw ApiException.forbidden("Cannot delete system role");
         }
 
         long assignmentCount = assignmentRepository.countByRoleId(id);
         if (assignmentCount > 0 && !force) {
-            throw new RuntimeException("Role has active assignments. Use force=true to delete.");
+            throw ApiException.conflict("Role has active assignments. Use force=true to delete.");
         }
 
         roleRepository.delete(role);
@@ -147,7 +148,7 @@ public class RoleService {
     @Transactional
     public void grantPermissions(String roleId, List<String> permissionCodes, String adminId) {
         Role role = roleRepository.findById(roleId)
-            .orElseThrow(() -> new RuntimeException("Role not found"));
+            .orElseThrow(() -> ApiException.notFound("Role", roleId));
 
         Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissionCodes));
         role.getPermissions().addAll(newPermissions);
@@ -163,7 +164,7 @@ public class RoleService {
     @Transactional
     public void revokePermissions(String roleId, List<String> permissionCodes, String adminId) {
         Role role = roleRepository.findById(roleId)
-            .orElseThrow(() -> new RuntimeException("Role not found"));
+            .orElseThrow(() -> ApiException.notFound("Role", roleId));
 
         role.getPermissions().removeIf(p -> permissionCodes.contains(p.getCode()));
         
@@ -178,14 +179,14 @@ public class RoleService {
     @Transactional
     public void setParentRole(String roleId, String parentRoleId, String adminId) {
         Role role = roleRepository.findById(roleId)
-            .orElseThrow(() -> new RuntimeException("Role not found"));
+            .orElseThrow(() -> ApiException.notFound("Role", roleId));
         
         Role parent = roleRepository.findById(parentRoleId)
-            .orElseThrow(() -> new RuntimeException("Parent role not found"));
+            .orElseThrow(() -> ApiException.notFound("Parent role", parentRoleId));
 
         // Check for cycles
         if (wouldCreateCycle(role, parent)) {
-            throw new RuntimeException("Setting this parent would create a cycle in role hierarchy");
+            throw ApiException.badRequest("Setting this parent would create a cycle in role hierarchy");
         }
 
         role.setParentRole(parent);

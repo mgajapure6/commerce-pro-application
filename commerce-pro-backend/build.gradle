@@ -61,6 +61,8 @@ dependencies {
 	implementation 'commons-io:commons-io:2.18.0'
 	// Commons Collections - Collection utilities
 	implementation 'org.apache.commons:commons-collections4:4.4'
+	// Commons Codec - Base32 for TOTP MFA secrets
+	implementation 'commons-codec:commons-codec:1.17.1'
 	
 	// =============================================
 	// JSON Processing

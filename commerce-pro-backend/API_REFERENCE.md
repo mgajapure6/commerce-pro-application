@@ -5,6 +5,41 @@
 http://localhost:8080/api
 ```
 
+## Authentication & Identity API (v1)
+
+Base path: `/api/v1`
+
+### Auth Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/auth/login` | Username/password login, returns access + refresh tokens | No |
+| POST | `/auth/refresh` | Refresh access token using refresh token | No |
+| POST | `/auth/logout` | Logout current session (audit event) | Yes |
+| POST | `/auth/change-password` | Change current authenticated user's password | Yes |
+
+### MFA (TOTP) Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/auth/mfa/setup` | Generate a new TOTP secret + `otpauth://` URL for authenticator apps | Yes |
+| POST | `/auth/mfa/enable` | Verify a 6-digit TOTP code and enable MFA | Yes |
+| POST | `/auth/mfa/disable` | Disable MFA by verifying current password + 6-digit TOTP code | Yes |
+
+### Identity User Management
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/identity/users` | Create user |
+| GET | `/identity/users` | List users |
+| GET | `/identity/users/{id}` | Get user details |
+| PUT | `/identity/users/{id}` | Update user |
+| DELETE | `/identity/users/{id}` | Soft delete user |
+| POST | `/identity/users/{id}/roles` | Assign role |
+| DELETE | `/identity/users/{id}/roles/{assignmentId}` | Revoke role assignment |
+
+> Note: identity-mutating endpoints now derive actor identity from authenticated security context; they no longer rely on client-supplied `X-Admin-Id` or `X-User-Id` headers.
+
 ## Product API Endpoints
 
 ### CRUD Operations
