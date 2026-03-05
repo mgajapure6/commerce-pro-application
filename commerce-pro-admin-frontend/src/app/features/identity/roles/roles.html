@@ -1,0 +1,50 @@
+<div class="min-h-screen bg-gray-50/50 p-4 sm:p-6 lg:p-8">
+  <div class="max-w-[1600px] mx-auto space-y-6">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+      <div>
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl font-bold text-gray-900">Identity Roles</h1>
+          <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">{{ totalRoles() }} roles</span>
+        </div>
+        <p class="text-gray-500 mt-1 text-sm">Create roles and map permissions to those roles.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div class="xl:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Role List</h2>
+        <div class="space-y-3">
+          @for (role of roles(); track role.id) {
+            <div class="p-4 rounded-2xl border border-gray-100 flex items-center justify-between">
+              <div>
+                <p class="text-sm font-semibold text-gray-900">{{ role.name }} <span class="text-xs text-gray-500">({{ role.code }})</span></p>
+                <p class="text-xs text-gray-500">{{ role.permissionCount }} permissions · {{ role.assignedUserCount }} users</p>
+              </div>
+              <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">{{ role.type || 'CUSTOM' }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm h-full flex flex-col gap-4">
+        <h2 class="text-lg font-semibold text-gray-900">Create Role</h2>
+        <input class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm" placeholder="Role code" [ngModel]="createRoleForm().code" (ngModelChange)="updateCreateRoleField('code', $event)" />
+        <input class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm" placeholder="Role name" [ngModel]="createRoleForm().name" (ngModelChange)="updateCreateRoleField('name', $event)" />
+        <textarea class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm" rows="3" placeholder="Description" [ngModel]="createRoleForm().description" (ngModelChange)="updateCreateRoleField('description', $event)"></textarea>
+        <button (click)="createRole()" class="px-4 py-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 text-sm font-medium">Create role</button>
+
+        <hr class="border-gray-100" />
+
+        <h3 class="text-sm font-semibold text-gray-900">Map permissions to role</h3>
+        <select class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm" [ngModel]="selectedRoleId()" (ngModelChange)="selectedRoleId.set($event)">
+          <option value="">Select role</option>
+          @for (role of roles(); track role.id) {
+            <option [value]="role.id">{{ role.name }}</option>
+          }
+        </select>
+        <input class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm" placeholder="Permission codes (comma separated)" [ngModel]="permissionCodesInput()" (ngModelChange)="permissionCodesInput.set($event)" />
+        <button (click)="mapPermissionsToRole()" class="px-4 py-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 text-sm font-medium">Grant permissions</button>
+      </div>
+    </div>
+  </div>
+</div>

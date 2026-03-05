@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+
+import { AuthService } from '../../../../../core/services/auth/auth.service';
 import { OutsideClickDirective } from '../../../../directives/outside-click.directive';
 
 @Component({
@@ -11,14 +13,21 @@ import { OutsideClickDirective } from '../../../../directives/outside-click.dire
   styleUrl: './user-menu.scss'
 })
 export class UserMenu {
-  isOpen = signal(false);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  toggle() {
-    this.isOpen.update(v => !v);
+  readonly isOpen = signal(false);
+  readonly session = this.authService.session;
+  readonly displayName = computed(() => this.session()?.username ?? 'Guest User');
+
+  toggle(): void {
+    this.isOpen.update(value => !value);
   }
 
-  logout() {
-    // Implement logout logic
-    console.log('Logging out...');
+  logout(): void {
+    this.authService.logout().subscribe(() => {
+      this.isOpen.set(false);
+      this.router.navigate(['/auth/login']);
+    });
   }
 }

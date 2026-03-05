@@ -54,8 +54,8 @@ public class PermissionController {
     @PreAuthorize("hasAuthority('identity:permission:read')")
     @Operation(summary = "List all permissions in database")
     public ApiResponse<Page<PermissionDTO>> listPermissions(
-            @RequestParam(required = false) PermissionCategory category,
-            @RequestParam(required = false) Boolean systemOnly,
+            @RequestParam(name = "category", required = false) PermissionCategory category,
+            @RequestParam(name = "systemOnly", required = false) Boolean systemOnly,
             Pageable pageable) {
         return ApiResponse.success(permissionService.findPermissions(category, systemOnly, pageable));
     }

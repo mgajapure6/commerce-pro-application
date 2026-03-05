@@ -13,3 +13,6 @@ export * from './customer.service';
 export * from './order.service';
 export * from './dashboard.service';
 export * from './notification.service';
+
+export * from './identity/identity.service';
+export * from './auth/auth.service';
