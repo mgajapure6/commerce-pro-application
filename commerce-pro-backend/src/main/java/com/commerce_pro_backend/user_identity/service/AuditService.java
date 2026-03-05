@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.dto.AuditLogDTO;
 import com.commerce_pro_backend.user_identity.dto.ExportRequest;
 import com.commerce_pro_backend.user_identity.dto.ExportResult;
@@ -86,7 +87,7 @@ public class AuditService {
     @Transactional(readOnly = true)
     public AuditLogDTO getLogDetail(String id) {
         AuditLog log = auditLogRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Audit log not found"));
+            .orElseThrow(() -> ApiException.notFound("Audit log", id));
         return mapToDTO(log);
     }
 

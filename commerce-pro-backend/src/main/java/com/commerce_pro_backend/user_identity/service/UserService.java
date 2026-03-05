@@ -3,6 +3,7 @@ package com.commerce_pro_backend.user_identity.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.dto.AuditLogDTO;
 import com.commerce_pro_backend.user_identity.dto.CreateUserRequest;
 import com.commerce_pro_backend.user_identity.dto.ImpersonationToken;
@@ -47,10 +49,10 @@ public class UserService {
     @Transactional
     public UserDTO createUser(CreateUserRequest request, String adminId) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw ApiException.conflict("Username already exists");
         }
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw ApiException.conflict("Email already exists");
         }
 
         User user = User.builder()
@@ -73,7 +75,7 @@ public class UserService {
         if (request.getInitialRoleCodes() != null) {
             for (String roleCode : request.getInitialRoleCodes()) {
                 Role role = roleRepository.findByCode(roleCode)
-                    .orElseThrow(() -> new RuntimeException("Role not found: " + roleCode));
+                    .orElseThrow(() -> ApiException.badRequest("Role not found: " + roleCode));
                 saved.assignRole(role, adminId, null, null);
             }
         }
@@ -93,14 +95,20 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserDetailDTO getUserDetail(String id) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", id));
         return mapToDetailDTO(user);
     }
 
     @Transactional
     public UserDTO updateUser(String id, UpdateUserRequest request, String adminId) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", id));
+
+        if (request.getEmail() != null
+                && !request.getEmail().equalsIgnoreCase(user.getEmail())
+                && userRepository.existsByEmail(request.getEmail())) {
+            throw ApiException.conflict("Email already exists");
+        }
 
         String oldValue = String.format("email=%s, firstName=%s, lastName=%s, active=%s",
             user.getEmail(), user.getFirstName(), user.getLastName(), user.getIsActive());
@@ -129,7 +137,7 @@ public class UserService {
     @Transactional
     public void deleteUser(String id, String adminId, String reason) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", id));
 
         // Soft delete - deactivate and mark
         user.setIsActive(false);
@@ -144,7 +152,7 @@ public class UserService {
     @Transactional
     public void activateUser(String id, String adminId) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", id));
         user.setIsActive(true);
         user.setUpdatedBy(adminId);
         userRepository.save(user);
@@ -156,7 +164,7 @@ public class UserService {
     @Transactional
     public void deactivateUser(String id, String adminId, String reason) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", id));
         user.setIsActive(false);
         user.setUpdatedBy(adminId);
         userRepository.save(user);
@@ -168,7 +176,7 @@ public class UserService {
     @Transactional
     public void resetPassword(String id, String adminId, boolean notifyUser) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", id));
         
         String tempPassword = generateTempPassword();
         user.setPasswordHash(passwordEncoder.encode(tempPassword));
@@ -186,7 +194,7 @@ public class UserService {
     @Transactional
     public void unlockAccount(String id, String adminId) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", id));
         user.setLockedUntil(null);
         user.setFailedLoginAttempts(0);
         user.setUpdatedBy(adminId);
@@ -199,15 +207,17 @@ public class UserService {
     @Transactional
     public void assignRole(String userId, RoleAssignmentRequest request, String adminId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", userId));
         
         Role role = roleRepository.findByCode(request.getRoleCode())
-            .orElseThrow(() -> new RuntimeException("Role not found"));
+            .orElseThrow(() -> ApiException.badRequest("Role not found: " + request.getRoleCode()));
 
-        LocalDateTime validFrom = request.getValidFrom() != null ? 
-            LocalDateTime.parse(request.getValidFrom(), DateTimeFormatter.ISO_DATE_TIME) : null;
-        LocalDateTime validUntil = request.getValidUntil() != null ? 
-            LocalDateTime.parse(request.getValidUntil(), DateTimeFormatter.ISO_DATE_TIME) : null;
+        LocalDateTime validFrom = parseIsoDateTimeOrNull(request.getValidFrom(), "validFrom");
+        LocalDateTime validUntil = parseIsoDateTimeOrNull(request.getValidUntil(), "validUntil");
+
+        if (validFrom != null && validUntil != null && validUntil.isBefore(validFrom)) {
+            throw ApiException.badRequest("validUntil must be after validFrom");
+        }
 
         user.assignRole(role, adminId, validFrom, validUntil);
         userRepository.save(user);
@@ -219,7 +229,11 @@ public class UserService {
     @Transactional
     public void revokeRole(String userId, String assignmentId, String adminId, String reason) {
         UserRoleAssignment assignment = assignmentRepository.findById(assignmentId)
-            .orElseThrow(() -> new RuntimeException("Assignment not found"));
+            .orElseThrow(() -> ApiException.notFound("User role assignment", assignmentId));
+
+        if (!assignment.getUser().getId().equals(userId)) {
+            throw ApiException.badRequest("Assignment does not belong to user: " + userId);
+        }
 
         assignment.setStatus(AssignmentStatus.REVOKED);
         assignment.setRevokedBy(adminId);
@@ -240,10 +254,14 @@ public class UserService {
     @Transactional
     public ImpersonationToken startImpersonation(String targetUserId, String adminId) {
         User target = userRepository.findById(targetUserId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", targetUserId));
         
         User admin = userRepository.findById(adminId)
-            .orElseThrow(() -> new RuntimeException("Admin not found"));
+            .orElseThrow(() -> ApiException.notFound("Admin", adminId));
+
+        if (target.getId().equals(adminId)) {
+            throw ApiException.badRequest("Cannot impersonate self");
+        }
 
         String token = tokenProvider.generateImpersonationToken(
             admin.getUsername(), targetUserId, target.getUsername());
@@ -326,5 +344,16 @@ public class UserService {
 
     private String generateTempPassword() {
         return UUID.randomUUID().toString().substring(0, 12);
+    }
+
+    private LocalDateTime parseIsoDateTimeOrNull(String value, String fieldName) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        } catch (DateTimeParseException ex) {
+            throw ApiException.badRequest("Invalid date format for " + fieldName + ". Expected ISO_DATE_TIME");
+        }
     }
 }

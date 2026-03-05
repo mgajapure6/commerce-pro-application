@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,6 +23,7 @@ import com.commerce_pro_backend.user_identity.dto.RoleAssignmentRequest;
 import com.commerce_pro_backend.user_identity.dto.UpdateUserRequest;
 import com.commerce_pro_backend.user_identity.dto.UserDTO;
 import com.commerce_pro_backend.user_identity.dto.UserDetailDTO;
+import com.commerce_pro_backend.user_identity.service.CurrentUserService;
 import com.commerce_pro_backend.user_identity.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,15 +41,15 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
+    private final CurrentUserService currentUserService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('identity:user:create')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create new user")
     public ApiResponse<UserDTO> createUser(
-            @Valid @RequestBody CreateUserRequest request,
-            @RequestHeader("X-Admin-Id") String adminId) {
-        return ApiResponse.success(userService.createUser(request, adminId));
+            @Valid @RequestBody CreateUserRequest request) {
+        return ApiResponse.success(userService.createUser(request, currentUserService.getCurrentUserId()));
     }
 
     @GetMapping
@@ -78,9 +78,8 @@ public class UserController {
     @Operation(summary = "Update user information")
     public ApiResponse<UserDTO> updateUser(
             @PathVariable String id,
-            @Valid @RequestBody UpdateUserRequest request,
-            @RequestHeader("X-Admin-Id") String adminId) {
-        return ApiResponse.success(userService.updateUser(id, request, adminId));
+            @Valid @RequestBody UpdateUserRequest request) {
+        return ApiResponse.success(userService.updateUser(id, request, currentUserService.getCurrentUserId()));
     }
 
     @DeleteMapping("/{id}")
@@ -88,9 +87,8 @@ public class UserController {
     @Operation(summary = "Delete user (soft delete with audit)")
     public ApiResponse<String> deleteUser(
             @PathVariable String id,
-            @RequestHeader("X-Admin-Id") String adminId,
             @RequestParam(required = false) String reason) {
-        userService.deleteUser(id, adminId, reason);
+        userService.deleteUser(id, currentUserService.getCurrentUserId(), reason);
         return ApiResponse.success("User deleted successfully");
     }
 
@@ -98,9 +96,8 @@ public class UserController {
     @PreAuthorize("hasAuthority('identity:user:activate')")
     @Operation(summary = "Activate user account")
     public ApiResponse<String> activateUser(
-            @PathVariable String id,
-            @RequestHeader("X-Admin-Id") String adminId) {
-        userService.activateUser(id, adminId);
+            @PathVariable String id) {
+        userService.activateUser(id, currentUserService.getCurrentUserId());
         return ApiResponse.success("User activated");
     }
 
@@ -109,9 +106,8 @@ public class UserController {
     @Operation(summary = "Deactivate user account")
     public ApiResponse<String> deactivateUser(
             @PathVariable String id,
-            @RequestHeader("X-Admin-Id") String adminId,
             @RequestParam String reason) {
-        userService.deactivateUser(id, adminId, reason);
+        userService.deactivateUser(id, currentUserService.getCurrentUserId(), reason);
         return ApiResponse.success("User deactivated");
     }
 
@@ -120,9 +116,8 @@ public class UserController {
     @Operation(summary = "Force password reset")
     public ApiResponse<String> resetPassword(
             @PathVariable String id,
-            @RequestHeader("X-Admin-Id") String adminId,
             @RequestParam(required = false, defaultValue = "true") boolean notifyUser) {
-        userService.resetPassword(id, adminId, notifyUser);
+        userService.resetPassword(id, currentUserService.getCurrentUserId(), notifyUser);
         return ApiResponse.success("Password reset initiated");
     }
 
@@ -130,9 +125,8 @@ public class UserController {
     @PreAuthorize("hasAuthority('identity:security:unlock-account')")
     @Operation(summary = "Unlock locked account")
     public ApiResponse<String> unlockAccount(
-            @PathVariable String id,
-            @RequestHeader("X-Admin-Id") String adminId) {
-        userService.unlockAccount(id, adminId);
+            @PathVariable String id) {
+        userService.unlockAccount(id, currentUserService.getCurrentUserId());
         return ApiResponse.success("Account unlocked");
     }
 
@@ -141,9 +135,8 @@ public class UserController {
     @Operation(summary = "Assign role to user")
     public ApiResponse<String> assignRole(
             @PathVariable String id,
-            @Valid @RequestBody RoleAssignmentRequest request,
-            @RequestHeader("X-Admin-Id") String adminId) {
-        userService.assignRole(id, request, adminId);
+            @Valid @RequestBody RoleAssignmentRequest request) {
+        userService.assignRole(id, request, currentUserService.getCurrentUserId());
         return ApiResponse.success("Role assigned successfully");
     }
 
@@ -153,9 +146,8 @@ public class UserController {
     public ApiResponse<String> revokeRole(
             @PathVariable String id,
             @PathVariable String assignmentId,
-            @RequestHeader("X-Admin-Id") String adminId,
             @RequestParam String reason) {
-        userService.revokeRole(id, assignmentId, adminId, reason);
+        userService.revokeRole(id, assignmentId, currentUserService.getCurrentUserId(), reason);
         return ApiResponse.success("Role revoked successfully");
     }
 
@@ -172,8 +164,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('identity:user:impersonate')")
     @Operation(summary = "Start impersonation session")
     public ApiResponse<ImpersonationToken> impersonateUser(
-            @PathVariable String id,
-            @RequestHeader("X-Admin-Id") String adminId) {
-        return ApiResponse.success(userService.startImpersonation(id, adminId));
+            @PathVariable String id) {
+        return ApiResponse.success(userService.startImpersonation(id, currentUserService.getCurrentUserId()));
     }
 }

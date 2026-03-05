@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.entity.User;
 import com.commerce_pro_backend.user_identity.entity.UserRoleAssignment;
 import com.commerce_pro_backend.user_identity.enums.AssignmentStatus;
@@ -24,7 +25,7 @@ public class AuthorizationService {
     @Transactional(readOnly = true)
     public boolean hasPermission(String username, String permission) {
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", username));
 
         return user.getRoleAssignments().stream()
             .filter(a -> a.getStatus() == AssignmentStatus.ACTIVE)
@@ -49,7 +50,7 @@ public class AuthorizationService {
     @Transactional(readOnly = true)
     public Set<String> getUserPermissions(String username) {
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", username));
 
         return user.getRoleAssignments().stream()
             .filter(a -> a.getStatus() == AssignmentStatus.ACTIVE)
@@ -73,7 +74,7 @@ public class AuthorizationService {
     @Transactional(readOnly = true)
     public boolean isSuperAdmin(String username) {
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", username));
 
         return user.getRoleAssignments().stream()
             .filter(a -> a.getStatus() == AssignmentStatus.ACTIVE)

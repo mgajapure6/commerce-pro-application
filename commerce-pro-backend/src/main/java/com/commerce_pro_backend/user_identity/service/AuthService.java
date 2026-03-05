@@ -7,10 +7,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.dto.AuthRequest;
 import com.commerce_pro_backend.user_identity.dto.AuthResponse;
 import com.commerce_pro_backend.user_identity.dto.ChangePasswordRequest;
@@ -30,6 +32,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomUserDetailsService userDetailsService;
     private final AuditService auditService;
     private final SuperAdminSetupService superAdminSetupService;
 
@@ -111,9 +114,11 @@ public class AuthService {
             throw new BadCredentialsException("User is deactivated");
         }
         
-        // Create temporary authentication for token generation
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        // Create authentication with effective authorities for refreshed access token
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-            username, null, java.util.Collections.emptyList()
+            userDetails, null, userDetails.getAuthorities()
         );
         
         boolean isSuperAdmin = superAdminSetupService.isSuperAdmin(username);
@@ -151,7 +156,7 @@ public class AuthService {
     @Transactional
     public void changePassword(String userId, ChangePasswordRequest request) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> ApiException.notFound("User", userId));
         
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
             throw new BadCredentialsException("Current password is incorrect");

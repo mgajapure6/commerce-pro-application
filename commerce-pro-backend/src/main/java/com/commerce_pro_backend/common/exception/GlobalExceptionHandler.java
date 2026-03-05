@@ -6,6 +6,8 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -78,6 +80,40 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAuthenticationException(
+            AuthenticationException ex, HttpServletRequest request) {
+
+        log.warn("Authentication failed: {}", ex.getMessage());
+
+        ApiResponse<Void> response = ApiResponse.<Void>builder()
+                .success(false)
+                .message("Authentication failed")
+                .error(Map.of("code", "UNAUTHORIZED", "detail", ex.getMessage()))
+                .timestamp(Instant.now().toEpochMilli())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(
+            AccessDeniedException ex, HttpServletRequest request) {
+
+        log.warn("Access denied: {}", ex.getMessage());
+
+        ApiResponse<Void> response = ApiResponse.<Void>builder()
+                .success(false)
+                .message("Access denied")
+                .error(Map.of("code", "FORBIDDEN", "detail", ex.getMessage()))
+                .timestamp(Instant.now().toEpochMilli())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGenericException(
             Exception ex, HttpServletRequest request) {
@@ -87,7 +123,7 @@ public class GlobalExceptionHandler {
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
                 .message("An unexpected error occurred")
-                .error(Map.of("code", "INTERNAL_SERVER_ERROR", "detail", ex.getMessage()))
+                .error(Map.of("code", "INTERNAL_SERVER_ERROR"))
                 .timestamp(Instant.now().toEpochMilli())
                 .path(request.getRequestURI())
                 .build();
