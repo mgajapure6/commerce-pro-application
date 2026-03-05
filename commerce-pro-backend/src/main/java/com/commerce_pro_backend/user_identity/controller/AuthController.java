@@ -13,6 +13,9 @@ import com.commerce_pro_backend.common.exception.ApiException;
 import com.commerce_pro_backend.user_identity.dto.AuthRequest;
 import com.commerce_pro_backend.user_identity.dto.AuthResponse;
 import com.commerce_pro_backend.user_identity.dto.ChangePasswordRequest;
+import com.commerce_pro_backend.user_identity.dto.MfaDisableRequest;
+import com.commerce_pro_backend.user_identity.dto.MfaSetupResponse;
+import com.commerce_pro_backend.user_identity.dto.MfaVerificationRequest;
 import com.commerce_pro_backend.user_identity.dto.RefreshTokenRequest;
 import com.commerce_pro_backend.user_identity.service.AuthService;
 import com.commerce_pro_backend.user_identity.service.CurrentUserService;
@@ -60,5 +63,25 @@ public class AuthController {
             @Valid @RequestBody ChangePasswordRequest request) {
         authService.changePassword(currentUserService.getCurrentUserId(), request);
         return ResponseEntity.ok(ApiResponse.success("Password changed successfully"));
+    }
+
+    @PostMapping("/mfa/setup")
+    @Operation(summary = "Initialize MFA setup and return TOTP secret + otpauth URL")
+    public ResponseEntity<ApiResponse<MfaSetupResponse>> setupMfa() {
+        return ResponseEntity.ok(ApiResponse.success(authService.setupMfa(currentUserService.getCurrentUserId())));
+    }
+
+    @PostMapping("/mfa/enable")
+    @Operation(summary = "Enable MFA by verifying a TOTP code")
+    public ResponseEntity<ApiResponse<String>> enableMfa(@Valid @RequestBody MfaVerificationRequest request) {
+        authService.enableMfa(currentUserService.getCurrentUserId(), request.getCode());
+        return ResponseEntity.ok(ApiResponse.success("MFA enabled successfully"));
+    }
+
+    @PostMapping("/mfa/disable")
+    @Operation(summary = "Disable MFA using current password and TOTP code")
+    public ResponseEntity<ApiResponse<String>> disableMfa(@Valid @RequestBody MfaDisableRequest request) {
+        authService.disableMfa(currentUserService.getCurrentUserId(), request);
+        return ResponseEntity.ok(ApiResponse.success("MFA disabled successfully"));
     }
 }
