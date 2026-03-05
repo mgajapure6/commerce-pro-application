@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,6 +43,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
                 // Disable CSRF for H2 Console and stateless JWT
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
@@ -63,12 +65,24 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/identity/config/**").hasRole("SUPER_ADMIN")
                         .requestMatchers("/api/v1/identity/audit/**").hasAnyRole("SUPER_ADMIN", "AUDIT_ADMIN")
 
-                        // Identity management
+                        // Identity User
                         .requestMatchers(HttpMethod.POST, "/api/v1/identity/users").hasAuthority("identity:user:create")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/identity/users/**")
-                        .hasAuthority("identity:user:delete")
-                        .requestMatchers("/api/v1/identity/roles/**").hasAuthority("identity:role:manage")
-                        .requestMatchers("/api/v1/identity/permissions/**").hasAuthority("identity:permission:read")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/identity/users/**").hasAuthority("identity:user:delete")
+                        
+                        // Identity roles (align with RoleController + PermissionRegistry)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/identity/roles/**").hasAuthority("identity:role:read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/identity/roles").hasAuthority("identity:role:create")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/identity/roles/**").hasAuthority("identity:role:update")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/identity/roles/**").hasAuthority("identity:role:delete")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/identity/roles/*/permissions").hasAuthority("identity:role:manage-permissions")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/identity/roles/*/permissions").hasAuthority("identity:role:manage-permissions")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/identity/roles/*/hierarchy/parent").hasAuthority("identity:role:manage-hierarchy")
+
+                        // Identity permissions (align with PermissionController)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/identity/permissions/**").hasAuthority("identity:permission:read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/identity/permissions/**").hasAuthority("identity:permission:create")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/identity/permissions/**").hasAuthority("identity:permission:update")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/identity/permissions/**").hasAuthority("identity:permission:delete")
 
                         // All other requests need authentication
                         .anyRequest().authenticated())

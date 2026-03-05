@@ -57,11 +57,11 @@ public class UserController {
     @Operation(summary = "List all users with filtering and pagination")
     public ApiResponse<Page<UserDTO>> listUsers(
             @Parameter(description = "Filter by active status") 
-            @RequestParam(required = false) Boolean active,
+            @RequestParam(name = "active", required = false) Boolean active,
             @Parameter(description = "Filter by role") 
-            @RequestParam(required = false) String roleCode,
+            @RequestParam(name = "roleCode", required = false) String roleCode,
             @Parameter(description = "Search by username/email") 
-            @RequestParam(required = false) String search,
+            @RequestParam(name = "search", required = false) String search,
             Pageable pageable) {
         return ApiResponse.success(userService.findUsers(active, roleCode, search, pageable));
     }
@@ -87,7 +87,7 @@ public class UserController {
     @Operation(summary = "Delete user (soft delete with audit)")
     public ApiResponse<String> deleteUser(
             @PathVariable String id,
-            @RequestParam(required = false) String reason) {
+            @RequestParam(name = "reason", required = false) String reason) {
         userService.deleteUser(id, currentUserService.getCurrentUserId(), reason);
         return ApiResponse.success("User deleted successfully");
     }
@@ -106,7 +106,7 @@ public class UserController {
     @Operation(summary = "Deactivate user account")
     public ApiResponse<String> deactivateUser(
             @PathVariable String id,
-            @RequestParam String reason) {
+            @RequestParam(name = "reason") String reason) {
         userService.deactivateUser(id, currentUserService.getCurrentUserId(), reason);
         return ApiResponse.success("User deactivated");
     }
@@ -116,7 +116,7 @@ public class UserController {
     @Operation(summary = "Force password reset")
     public ApiResponse<String> resetPassword(
             @PathVariable String id,
-            @RequestParam(required = false, defaultValue = "true") boolean notifyUser) {
+            @RequestParam(name="notifyUser", required = false, defaultValue = "true") boolean notifyUser) {
         userService.resetPassword(id, currentUserService.getCurrentUserId(), notifyUser);
         return ApiResponse.success("Password reset initiated");
     }
@@ -146,7 +146,7 @@ public class UserController {
     public ApiResponse<String> revokeRole(
             @PathVariable String id,
             @PathVariable String assignmentId,
-            @RequestParam String reason) {
+            @RequestParam(name="reason") String reason) {
         userService.revokeRole(id, assignmentId, currentUserService.getCurrentUserId(), reason);
         return ApiResponse.success("Role revoked successfully");
     }

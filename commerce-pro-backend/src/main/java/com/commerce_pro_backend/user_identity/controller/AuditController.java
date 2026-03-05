@@ -46,17 +46,17 @@ public class AuditController {
     @Operation(summary = "Query audit logs with filters")
     public ApiResponse<Page<AuditLogDTO>> queryAuditLogs(
             @Parameter(description = "Filter by actor (admin) ID")
-            @RequestParam(required = false) String actorId,
+            @RequestParam(name = "actorId", required = false) String actorId,
             @Parameter(description = "Filter by target user ID")
-            @RequestParam(required = false) String targetId,
+            @RequestParam(name = "targetId", required = false) String targetId,
             @Parameter(description = "Filter by action type")
-            @RequestParam(required = false) AuditAction action,
+            @RequestParam(name = "action", required = false) AuditAction action,
             @Parameter(description = "Start date (ISO format)")
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam(name = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @Parameter(description = "End date (ISO format)")
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @RequestParam(name = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
             @Parameter(description = "Full-text search")
-            @RequestParam(required = false) String search,
+            @RequestParam(name = "search", required = false) String search,
             Pageable pageable) {
         return ApiResponse.success(auditService.queryLogs(actorId, targetId, action, from, to, search, pageable));
     }
@@ -83,7 +83,7 @@ public class AuditController {
     public ApiResponse<PurgeResult> purgeAuditLogs(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime before,
             @RequestHeader("X-Admin-Id") String adminId,
-            @RequestParam(required = false, defaultValue = "false") boolean dryRun) {
+            @RequestParam(name = "dryRun", required = false, defaultValue = "false") boolean dryRun) {
         return ApiResponse.success(auditService.purgeLogs(before, adminId, dryRun));
     }
 
@@ -91,8 +91,8 @@ public class AuditController {
     @PreAuthorize("hasAuthority('identity:audit:read')")
     @Operation(summary = "Get audit statistics")
     public ApiResponse<Map<String, Object>> getAuditStats(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
+            @RequestParam(name = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam(name = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
         return ApiResponse.success(auditService.getStatistics(from, to));
     }
 

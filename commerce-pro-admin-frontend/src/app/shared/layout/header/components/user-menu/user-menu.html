@@ -2,7 +2,7 @@
     <button (click)="toggle()" class="flex items-center gap-3 hover:bg-gray-50 rounded-lg p-1.5 pr-3 transition-colors">
         <img src="https://i.pravatar.cc/150?img=11" alt="Profile" class="w-8 h-8 rounded-full border-2 border-gray-100">
         <div class="hidden md:block text-left">
-            <p class="text-sm font-medium text-gray-900">Alex Morgan</p>
+            <p class="text-sm font-medium text-gray-900">{{ displayName() }}</p>
             <p class="text-xs text-gray-500">Store Admin</p>
         </div>
         <i class="bi bi-chevron-down w-4 h-4 text-gray-400 hidden md:block"></i>
@@ -15,8 +15,8 @@
                 <img src="https://i.pravatar.cc/150?img=11" alt="Profile"
                     class="w-12 h-12 rounded-full border-2 border-gray-100">
                 <div>
-                    <p class="font-semibold text-gray-900">Alex Morgan</p>
-                    <p class="text-xs text-gray-500">alex@commercepro.com</p>
+                    <p class="font-semibold text-gray-900">{{ displayName() }}</p>
+                    <p class="text-xs text-gray-500">{{ session()?.username || "-" }}</p>
                 </div>
             </div>
         </div>

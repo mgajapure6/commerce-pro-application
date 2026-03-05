@@ -56,7 +56,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('identity:role:read')")
     @Operation(summary = "List all roles")
     public ApiResponse<Page<RoleDTO>> listRoles(
-            @RequestParam(required = false) Boolean systemOnly,
+            @RequestParam(name = "systemOnly", required = false) Boolean systemOnly,
             Pageable pageable) {
         return ApiResponse.success(roleService.findRoles(systemOnly, pageable));
     }
@@ -91,7 +91,7 @@ public class RoleController {
     public ApiResponse<String> deleteRole(
             @PathVariable String id,
             @RequestHeader("X-Admin-Id") String adminId,
-            @RequestParam(required = false, defaultValue = "false") boolean force) {
+            @RequestParam(name = "force", required = false, defaultValue = "false") boolean force) {
         roleService.deleteRole(id, adminId, force);
         return ApiResponse.success("Role deleted successfully");
     }
@@ -123,7 +123,7 @@ public class RoleController {
     @Operation(summary = "Set parent role")
     public ApiResponse<String> setParentRole(
             @PathVariable String id,
-            @RequestParam String parentRoleId,
+            @RequestParam(name = "parentRoleId") String parentRoleId,
             @RequestHeader("X-Admin-Id") String adminId) {
         roleService.setParentRole(id, parentRoleId, adminId);
         return ApiResponse.success("Parent role updated");

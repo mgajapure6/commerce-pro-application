@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-// @SpringBootApplication
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
+//@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableConfigurationProperties
 @EnableScheduling
 public class CommerceProBackendApplication {

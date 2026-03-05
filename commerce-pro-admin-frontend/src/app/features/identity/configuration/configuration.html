@@ -1,0 +1,29 @@
+<div class="min-h-screen bg-gray-50/50 p-4 sm:p-6 lg:p-8">
+  <div class="max-w-[1600px] mx-auto space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+      <h1 class="text-2xl font-bold text-gray-900">Identity Configuration</h1>
+      <p class="text-gray-500 mt-1 text-sm">Review super-admin policy and configuration controls.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900">Security Policy</h2>
+        <div class="mt-4 space-y-2 text-sm text-gray-600">
+          <p><span class="font-medium text-gray-900">MFA required:</span> {{ config()?.securityPolicy?.requireMfa ? 'Yes' : 'No' }}</p>
+          <p><span class="font-medium text-gray-900">Session timeout:</span> {{ config()?.securityPolicy?.sessionTimeoutMinutes ?? '—' }} minutes</p>
+          <p><span class="font-medium text-gray-900">Max concurrent sessions:</span> {{ config()?.securityPolicy?.maxConcurrentSessions ?? '—' }}</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900">Configuration Management</h2>
+        <div class="mt-4 space-y-2 text-sm text-gray-600">
+          <p><span class="font-medium text-gray-900">Can delete system roles:</span> {{ config()?.configManagement?.canDeleteSystemRoles ? 'Yes' : 'No' }}</p>
+          <p><span class="font-medium text-gray-900">Can modify own role:</span> {{ config()?.configManagement?.canModifyOwnRole ? 'Yes' : 'No' }}</p>
+          <p><span class="font-medium text-gray-900">Minimum super admins:</span> {{ config()?.configManagement?.minSuperAdmins ?? '—' }}</p>
+        </div>
+        <button (click)="reloadConfiguration()" class="mt-4 px-4 py-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 text-sm font-medium">Reload configuration</button>
+      </div>
+    </div>
+  </div>
+</div>
