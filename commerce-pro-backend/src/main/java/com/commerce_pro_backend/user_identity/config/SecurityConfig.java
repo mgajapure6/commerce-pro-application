@@ -21,6 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.commerce_pro_backend.user_identity.service.JwtAuthenticationFilter;
 import com.commerce_pro_backend.user_identity.service.JwtTokenProvider;
+import com.commerce_pro_backend.user_identity.service.RateLimitFilter;
 import com.commerce_pro_backend.user_identity.service.SuperAdminAuthorizationFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
     private final SuperAdminAuthorizationFilter superAdminFilter;
+    private final RateLimitFilter rateLimitFilter;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -87,7 +89,9 @@ public class SecurityConfig {
                         // All other requests need authentication
                         .anyRequest().authenticated())
                 .addFilterBefore(superAdminFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                // Rate limit runs first — before JWT auth so locked-out IPs never reach token parsing
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
